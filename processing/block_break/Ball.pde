@@ -72,6 +72,7 @@ class Ball {
           vel.y = vel.y*(-1);
           bl.life -= 1;
           bl.update(); //recalculate colour based on life left. Delete from arraylist and so dont show if appropriate
+          break;
         }
       }
     }

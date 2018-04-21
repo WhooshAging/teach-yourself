@@ -7,7 +7,7 @@ class Paddle {
     w = win;
     h = hin;
     x = width/2;
-    y = height - w;
+    y = height - w/2;
   }
 
   void update() {

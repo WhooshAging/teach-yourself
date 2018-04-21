@@ -13,7 +13,7 @@ ArrayList<Block> blocks = new ArrayList<Block>();
 void setup() {
   size(800, 600);
 
-  int b_size  = floor(0.01 * width);
+  int b_size  = floor(0.01 * width)/2; // provide a radius not a diameter
   int p_width = floor(0.1 * width);
   int p_height = floor(0.02 * height);
 
@@ -36,19 +36,127 @@ void buildBlocks() {
   // 'armour' using stroke()?
 
   // build the blocks to break
-  
+
   int w = floor(0.20 * width); //largest block width
   int h = floor(0.03 * height); //largest block height
-  
+
   int cols = floor(width / w );
-  int rows = floor( (0.4 * height)/ h ); // we'll place this many blocks in 55% of the available height
+  int rows = floor( (0.55 * height)/ h ); // we'll place this many blocks in 55% of the available height
   println("rows", rows);
   println("cols", cols);
 
   // init our blocks in an ArrayList
-  for (int i=0; i<cols; i++) {
-    for (int j=0; j<rows; j++) {
-      blocks.add(new Block(i*w, j*h, w, h) );
+  //for (int i=0; i<cols; i++) {
+  //  for (int j=0; j<rows; j++) {
+  //    blocks.add(new Block(i*w, j*h, w, h) );
+  //  }
+  //}
+
+  // rows is fixed
+  // we should vary the # cols per row which means having blokcks of vary width
+  // so init blocks, outer loop of rows
+
+  // bad implementation?
+  // will never know how many cases there are as rows is dynamaic based on height!
+  // so make use of default?
+  // maybe have a few options in default and pick a random nuber to choose?
+
+  for (int i=0; i<rows; i++) {
+    switch (i) {
+    case 0: 
+      {
+        // top row
+        cols = 2;
+        w = width/2;
+        for (int j=0; j<cols; j++) {
+          blocks.add(new Block(j*w, i*h, w, h));
+        }
+        break;
+      }
+    case 1: 
+      { //empty row to bounce around
+        break;
+      }
+    case 2: 
+      {
+        cols = 10;
+        w = width / cols;
+        for (int j=0; j<cols; j++) {
+          blocks.add(new Block(j*w, i*h, w, h));
+        }
+        break;
+      }
+    case 3: 
+      { //empty row to bounce around
+        break;
+      }
+    case 4: 
+      {
+        w = floor(0.20 * width);
+        cols = floor(width / w );
+        for (int j=0; j<cols; j++) {
+          blocks.add(new Block(j*w, i*h, w, h));
+        }
+        break;
+      }
+    case 5: 
+      {
+        cols = 20;
+        w = width / cols;
+        for (int j=0; j<cols; j++) {
+          blocks.add(new Block(j*w, i*h, w, h));
+        }
+        break;
+      }
+    case 6: 
+      {
+        cols = 20;
+        w = width / cols;
+        for (int j=0; j<cols; j++) {
+          int chance = (int)random(2); //just randomly decide where to place blocks
+          //println(chance);
+          if (chance == 1) {
+            blocks.add(new Block(j*w, i*h, w, h));
+          }
+        }
+        break;
+      }
+    case 7: 
+      {
+        cols = 10;
+        w = width / cols;
+        for (int j=0; j<cols; j++) {
+          int chance = (int)random(2); //just randomly decide where to place blocks
+          if (chance == 1) {
+            blocks.add(new Block(j*w, i*h, w, h));
+          }
+        }
+        break;
+      }
+    case 8: 
+      { //empty row to bounce around
+        break;
+      }
+    case 9: 
+      { //empty row to bounce around
+        break;
+      }
+      // etc
+    default: 
+      {
+        int cols_max = 50;
+        int cols_min = 1;
+        cols = floor(random(cols_min, cols_max));
+
+        w = width / cols;
+        for (int j=0; j<cols; j++) {
+          int chance = (int)random(2); //just randomly decide where to place blocks
+          if (chance == 1) {
+            blocks.add(new Block(j*w, i*h, w, h));
+          }
+        }
+        break;
+      }
     }
   }
 
