@@ -1,16 +1,21 @@
 class Block {
   int w,h,x,y,r,g,b,life,alpha;
   
-  Block(int xin, int yin, int win, int hin) {
+  Block(int xin, int yin, int win, int hin, PVector colourin) {
     x = xin;
     y = yin;
     w = win;
     h = hin;
     
     life = 3;
-    r = int(random(255));
-    g = int(random(255));
-    b = int(random(255));
+    //r = int(random(255));
+    //g = int(random(255));
+    //b = int(random(255));
+    
+    r = (int)colourin.x;
+    g = (int)colourin.y;
+    b = (int)colourin.z;
+    
     alpha = 255;
     
   }

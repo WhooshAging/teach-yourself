@@ -7,7 +7,7 @@ class Ball {
 
   Ball(int sin) {
     s = sin;
-    loc = new PVector(width/2, height/2);
+    loc = new PVector(width/2, height * 0.75);
     vel = new PVector(s*0.5,s*0.5);
     acc = new PVector(0, 0);
   }
@@ -66,11 +66,11 @@ class Ball {
     for (int i=0; i<blocks.size(); i++) {
       Block bl = blocks.get(i);
       // check all 4 edges of a block
-      if (loc.x + s > bl.x && loc.x - s < bl.x + bl.w) { // we are in the x bounds of left and right edge
-        if (loc.y + s > bl.y && loc.y - s < bl.y + bl.h) {
+      if (loc.x + s >= bl.x && loc.x - s <= bl.x + bl.w) { // we are in the x bounds of left and right edge
+        if (loc.y + s >= bl.y && loc.y - s <= bl.y + bl.h) {
           //println("Hit a block.");
           vel.y = vel.y*(-1);
-          bl.life -= 1;
+          bl.life--;
           bl.update(); //recalculate colour based on life left. Delete from arraylist and so dont show if appropriate
           break;
         }

@@ -2,7 +2,7 @@ Paddle p;
 Ball b;
 Block bl;
 ArrayList<Block> blocks = new ArrayList<Block>();
-
+boolean is_paused;
 
 
 
@@ -11,7 +11,7 @@ ArrayList<Block> blocks = new ArrayList<Block>();
 
 
 void setup() {
-  size(800, 600);
+  size(400, 300);
 
   int b_size  = floor(0.01 * width)/2; // provide a radius not a diameter
   int p_width = floor(0.1 * width);
@@ -22,6 +22,8 @@ void setup() {
   p = new Paddle(p_width, p_height);
   b = new Ball(b_size);
   //bl = new Block(10,10,p_width,p_height);
+  is_paused = true; // paused at start of game
+
 
   return;
 }
@@ -61,7 +63,12 @@ void buildBlocks() {
   // so make use of default?
   // maybe have a few options in default and pick a random nuber to choose?
 
+  // Block also takes in a PVector of color (r,g,b)
+
   for (int i=0; i<rows; i++) {
+    int r = (int)random(0, 155);
+    int g = (int)random(0, 155);
+    int b = (int)random(0, 155);
     switch (i) {
     case 0: 
       {
@@ -69,7 +76,11 @@ void buildBlocks() {
         cols = 2;
         w = width/2;
         for (int j=0; j<cols; j++) {
-          blocks.add(new Block(j*w, i*h, w, h));
+          int my_noise = (int)random(-5, 6);
+          r += my_noise;
+          g += my_noise;
+          b += my_noise;
+          blocks.add(new Block(j*w, i*h, w, h, new PVector(r, g, b)));
         }
         break;
       }
@@ -82,7 +93,11 @@ void buildBlocks() {
         cols = 10;
         w = width / cols;
         for (int j=0; j<cols; j++) {
-          blocks.add(new Block(j*w, i*h, w, h));
+          int my_noise = (int)random(-5, 6);
+          r += my_noise;
+          g += my_noise;
+          b += my_noise;
+          blocks.add(new Block(j*w, i*h, w, h, new PVector(r, g, b)));
         }
         break;
       }
@@ -95,7 +110,11 @@ void buildBlocks() {
         w = floor(0.20 * width);
         cols = floor(width / w );
         for (int j=0; j<cols; j++) {
-          blocks.add(new Block(j*w, i*h, w, h));
+          int my_noise = (int)random(-5, 6);
+          r += my_noise;
+          g += my_noise;
+          b += my_noise;
+          blocks.add(new Block(j*w, i*h, w, h, new PVector(r, g, b)));
         }
         break;
       }
@@ -104,7 +123,11 @@ void buildBlocks() {
         cols = 20;
         w = width / cols;
         for (int j=0; j<cols; j++) {
-          blocks.add(new Block(j*w, i*h, w, h));
+          int my_noise = (int)random(-5, 6);
+          r += my_noise;
+          g += my_noise;
+          b += my_noise;
+          blocks.add(new Block(j*w, i*h, w, h, new PVector(r, g, b)));
         }
         break;
       }
@@ -116,7 +139,11 @@ void buildBlocks() {
           int chance = (int)random(2); //just randomly decide where to place blocks
           //println(chance);
           if (chance == 1) {
-            blocks.add(new Block(j*w, i*h, w, h));
+            int my_noise = (int)random(-5, 6);
+            r += my_noise;
+            g += my_noise;
+            b += my_noise;
+            blocks.add(new Block(j*w, i*h, w, h, new PVector(r, g, b)));
           }
         }
         break;
@@ -128,7 +155,7 @@ void buildBlocks() {
         for (int j=0; j<cols; j++) {
           int chance = (int)random(2); //just randomly decide where to place blocks
           if (chance == 1) {
-            blocks.add(new Block(j*w, i*h, w, h));
+            blocks.add(new Block(j*w, i*h, w, h, new PVector(r, g, b)));
           }
         }
         break;
@@ -144,15 +171,17 @@ void buildBlocks() {
       // etc
     default: 
       {
-        int cols_max = 50;
-        int cols_min = 1;
+        int cols_max = 30;
+        int cols_min = 10;
         cols = floor(random(cols_min, cols_max));
 
         w = width / cols;
         for (int j=0; j<cols; j++) {
           int chance = (int)random(2); //just randomly decide where to place blocks
           if (chance == 1) {
-            blocks.add(new Block(j*w, i*h, w, h));
+
+
+            blocks.add(new Block(j*w, i*h, w, h, new PVector(r, g, b)));
           }
         }
         break;
@@ -173,6 +202,11 @@ void keyPressed() {
     p.is_moving_l = true;
   } else if (keyCode == RIGHT) {
     p.is_moving_r = true;
+  } else if (key == 'p') {
+    if (is_paused) {
+      is_paused = false;
+      loop();
+    } else is_paused = true;
   }
 
   return;
@@ -189,6 +223,11 @@ void keyReleased() {
 
 
 void draw() {
+  if (!is_paused) {
+    loop();
+  } else if (is_paused) {
+    noLoop();
+  }
   // background
   noStroke();
   fill(255);
