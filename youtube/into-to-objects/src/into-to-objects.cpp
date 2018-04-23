@@ -14,7 +14,11 @@ using namespace std;
 int main() {
 	cout << "Starting Programme ..." << endl;
 
-	Cat cat;
+	{
+	Cat cat("Bob",9);
+	cat.status();
+	}
+	Cat cat("wew",2);
 	cat.status();
 
 

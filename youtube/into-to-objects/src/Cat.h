@@ -5,6 +5,9 @@
  *      Author: Cherie
  */
 
+#include <iostream>
+using namespace std;
+
 #ifndef CAT_H_
 #define CAT_H_
 
@@ -12,9 +15,10 @@ class Cat {
 private:
 	bool happy;
 	int lives;
+	string name;
 
 public:
-	Cat();
+	Cat(string, int);
 	~Cat();
 	void speak();
 	void status();

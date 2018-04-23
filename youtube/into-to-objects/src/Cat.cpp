@@ -10,10 +10,11 @@
 
 using namespace std;
 
-Cat::Cat() {
+Cat::Cat(string namein, int livesin) {
 	cout << "Cat Created" << endl;
-	lives = 9;
+	lives = livesin;
 	happy = true;
+	name = namein;
 }
 
 Cat::~Cat() {
@@ -29,8 +30,12 @@ void Cat::status() {
 
 	cout << endl;
 	speak();
-
-	cout << "Happy\t" << happy << endl;
+	cout << "Name\t" << name << endl;
+	if (happy) {
+    	cout << "Happy\t" << "True" << endl;
+	} else if (!happy) {
+		cout << "Happy\t" << "False" << endl;
+	}
 	cout << "Lives\t" << lives << endl;
 	cout << endl;
 }
