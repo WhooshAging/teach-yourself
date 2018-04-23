@@ -166,7 +166,85 @@ int main() {
 	}
 
 	my_file.close(); // don't forget or bad things will happen
-
+	
+/* COMMENT START ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Should be a function anyway
+	cout << "Multiline comment" << endl;
+	
+	// save the arrays so we can clean up
+	// and generally 'do stuff with'
+	
+	ofstream myfile;
+	// should be a func - duh!
+	
+	myfile.open ("data/1.txt");
+	for (int i=0; i<(int)sizeof(words1)/sizeof(string); i++) {
+		myfile << words1[i];
+		myfile << "\n";
+	}
+	myfile.close();
+	
+	myfile.open ("data/2.txt");
+	for (int i=0; i<(int)sizeof(words2)/sizeof(string); i++) {
+		myfile << words2[i];
+		myfile << "\n";
+	}
+	myfile.close();
+	
+	myfile.open ("data/3.txt");
+	for (int i=0; i<(int)sizeof(words3)/sizeof(string); i++) {
+		myfile << words3[i];
+		myfile << "\n";
+	}
+	myfile.close();
+	
+	myfile.open ("data/4.txt");
+	for (int i=0; i<(int)sizeof(words4)/sizeof(string); i++) {
+		myfile << words4[i];
+		myfile << "\n";
+	}
+	myfile.close();
+	
+	myfile.open ("data/5.txt");
+	for (int i=0; i<(int)sizeof(words5)/sizeof(string); i++) {
+		myfile << words5[i];
+		myfile << "\n";
+	}
+	myfile.close();
+	
+	myfile.open ("data/6.txt");
+	for (int i=0; i<(int)sizeof(words6)/sizeof(string); i++) {
+		myfile << words6[i];
+		myfile << "\n";
+	}
+	myfile.close();
+	
+	myfile.open ("data/7.txt");
+	for (int i=0; i<(int)sizeof(words7)/sizeof(string); i++) {
+		myfile << words7[i];
+		myfile << "\n";
+	}
+	myfile.close();
+	
+	myfile.open ("data/8.txt");
+	for (int i=0; i<(int)sizeof(words8)/sizeof(string); i++) {
+		myfile << words8[i];
+		myfile << "\n";
+	}
+	myfile.close();
+	
+	myfile.open ("data/9.txt");
+	for (int i=0; i<(int)sizeof(words9)/sizeof(string); i++) {
+		myfile << words9[i];
+		myfile << "\n";
+	}
+	myfile.close();
+	
+	// phew !
+	
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COMMENT END	
+*/
+	
+	
 	cout << "Results of building arrays:" << endl;
 	cout << "# Letters \t # Items in Array \t First Entry" << endl;
 	cout << "1   \t\t " << sizeof(words1) / sizeof(string) << "    \t\t\t "
@@ -202,9 +280,9 @@ int main() {
 
 	int j, choice;
 	stringstream ss;
-	for (int i = 0; i < (int) sizeof(PI); i++) {
+	for (int i = 0; i < (int) sizeof(PI) - 1; i++) {
 		if (i != 0) {
-			ss << " ";
+			ss << "\t";
 		}
 		// can only switch on an int
 		// some magic required to convert from char to int e.g. '1' -> 1;
@@ -272,6 +350,19 @@ int main() {
 
 		}
 	}
+	
+	stringstream ss2;
+	for (int i=0; i<(int)sizeof(PI); i++) {
+		ss2 << PI[i];
+		if (i == 0) {
+			ss2 << ".";
+		}
+		if (PI[i] == '9') { // extra tab for longest word
+			ss2 << "\t";
+		}
+		ss2 << "\t";
+	}
+	cout << ss2.str() << endl;
 	cout << ss.str() << endl;
 
 	return 0;
