@@ -15,10 +15,14 @@
 #include <fstream>
 #include <sstream>
 #include <stdlib.h> // rand
+#include <ctime> // to seed rang
 
 using namespace std;
 
 int main() {
+	
+	// seed rand func
+	srand ( time(NULL) );
 
 	// open and read our file
 	ifstream my_file;
