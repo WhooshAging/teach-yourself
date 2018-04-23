@@ -13,14 +13,13 @@
 
 #include <iostream>
 #include <fstream>
-
+#include <sstream>
+#include <stdlib.h> // rand
 
 using namespace std;
 
 int main() {
 
-	// Set what we want to use for pi
-	const double PI = 3.1415926;
 	// open and read our file
 	ifstream my_file;
 	my_file.open("data/google-10000-most-frequent.txt");
@@ -188,8 +187,88 @@ int main() {
 			<< "N/A" << endl;
 
 	cout << endl;
+	// Set what we want to use for pi
+	const char PI[] = "31415926";
 
-	cout << "PI is: " << PI << endl;
+	//cout << "PI is: " << PI << endl;
+	//cout << "sizeof(pi) = " << sizeof(PI) << endl;
+
+	// loop over digits of pi
+	// pick random words from the appropriate array
+
+	int j, choice;
+	stringstream ss;
+	for (int i = 0; i < (int) sizeof(PI); i++) {
+		if (i != 0) {
+			ss << " ";
+		}
+		// can only switch on an int
+		// some magic required to convert from char to int e.g. '1' -> 1;
+		j = PI[i] - '0'; // https://stackoverflow.com/questions/5029840/convert-char-to-int-in-c-and-c
+		switch (j) {
+		case 0:
+			break;
+		case 1:
+			choice = rand() % (int) sizeof(words1) / sizeof(string) + 1;
+			//cout << "Choice 0 of words1: " << words1[0] << endl;
+			//cout << "Random choice of words1 " << words1[choice] << endl;
+			ss << words1[choice];
+			break;
+		case 2:
+			choice = rand() % (int) sizeof(words2) / sizeof(string) + 1;
+			//cout << "Choice 0 of words2: " << words2[0] << endl;
+			//cout << "Random choice of words2 " << words2[choice] << endl;
+			ss << words2[choice];
+			break;
+		case 3:
+			choice = rand() % (int) sizeof(words3) / sizeof(string) + 1;
+			//cout << "Choice 0 of words3: " << words3[0] << endl;
+			//cout << "Random choice of words3 " << words3[choice] << endl;
+			ss << words3[choice];
+			break;
+		case 4:
+			choice = rand() % (int) sizeof(words4) / sizeof(string) + 1;
+			//cout << "Choice 0 of words4: " << words4[0] << endl;
+			//cout << "Random choice of words4 " << words4[choice] << endl;
+			ss << words4[choice];
+			break;
+		case 5:
+			choice = rand() % (int) sizeof(words5) / sizeof(string) + 1;
+			//cout << "Choice 0 of words5: " << words5[0] << endl;
+			//cout << "Random choice of words5 " << words5[choice] << endl;
+			ss << words5[choice];
+			break;
+		case 6:
+			choice = rand() % (int) sizeof(words6) / sizeof(string) + 1;
+			//cout << "Choice 0 of words6: " << words6[0] << endl;
+			//cout << "Random choice of words6 " << words6[choice] << endl;
+			ss << words6[choice];
+			break;
+		case 7:
+			choice = rand() % (int) sizeof(words7) / sizeof(string) + 1;
+			//cout << "Choice 0 of words7: " << words7[0] << endl;
+			//cout << "Random choice of words7 " << words7[choice] << endl;
+			ss << words7[choice];
+			break;
+		case 8:
+			choice = rand() % (int) sizeof(words8) / sizeof(string) + 1;
+			//cout << "Choice 0 of words8: " << words8[0] << endl;
+			//cout << "Random choice of words8 " << words8[choice] << endl;
+			ss << words8[choice];
+			break;
+		case 9:
+			choice = rand() % (int) sizeof(words9) / sizeof(string) + 1;
+			//cout << "Choice 0 of words9: " << words9[0] << endl;
+			//cout << "Random choice of words9 " << words9[choice] << endl;
+			ss << words9[choice];
+			break;
+		default:
+			// no default case, just do nothing
+			break;
+
+		}
+	}
+	cout << ss.str() << endl;
 
 	return 0;
 }
