@@ -36,6 +36,7 @@ int main() {
 	// read like cin
 
 	string x;
+	int total = 0;
 	int count1 = 0;
 	int count2 = 0;
 	int count3 = 0;
@@ -49,6 +50,7 @@ int main() {
 	int length = 0;
 
 	while (my_file >> x) {
+		total++;
 		//cout << x << endl;
 		length = x.size();
 		//cout << length << endl;
@@ -267,6 +269,14 @@ int main() {
 			<< words9[0] << endl;
 	cout << "10+ \t\t " << "N/A " << "(" << notused << ") skipped" << "   \t\t "
 			<< "N/A" << endl;
+	cout << endl;
+	cout << "TOTAL (from file): " << total << endl;
+	cout << "TOTAL (from arrays): " << sizeof(words1) / sizeof(string) + sizeof(words2) / sizeof(string) +
+				sizeof(words3) / sizeof(string) + sizeof(words4) / sizeof(string) +
+				sizeof(words5) / sizeof(string) + sizeof(words6) / sizeof(string) +
+				sizeof(words7) / sizeof(string) + sizeof(words8) / sizeof(string) +
+				sizeof(words9) / sizeof(string) + notused << endl;
+	
 
 	cout << endl;
 	// Set what we want to use for pi
@@ -291,55 +301,55 @@ int main() {
 		case 0:
 			break;
 		case 1:
-			choice = rand() % (int) sizeof(words1) / sizeof(string) + 1;
+			choice = rand() % (int) sizeof(words1) / sizeof(string);
 			//cout << "Choice 0 of words1: " << words1[0] << endl;
 			//cout << "Random choice of words1 " << words1[choice] << endl;
 			ss << words1[choice];
 			break;
 		case 2:
-			choice = rand() % (int) sizeof(words2) / sizeof(string) + 1;
+			choice = rand() % (int) sizeof(words2) / sizeof(string);
 			//cout << "Choice 0 of words2: " << words2[0] << endl;
 			//cout << "Random choice of words2 " << words2[choice] << endl;
 			ss << words2[choice];
 			break;
 		case 3:
-			choice = rand() % (int) sizeof(words3) / sizeof(string) + 1;
+			choice = rand() % (int) sizeof(words3) / sizeof(string);
 			//cout << "Choice 0 of words3: " << words3[0] << endl;
 			//cout << "Random choice of words3 " << words3[choice] << endl;
 			ss << words3[choice];
 			break;
 		case 4:
-			choice = rand() % (int) sizeof(words4) / sizeof(string) + 1;
+			choice = rand() % (int) sizeof(words4) / sizeof(string);
 			//cout << "Choice 0 of words4: " << words4[0] << endl;
 			//cout << "Random choice of words4 " << words4[choice] << endl;
 			ss << words4[choice];
 			break;
 		case 5:
-			choice = rand() % (int) sizeof(words5) / sizeof(string) + 1;
+			choice = rand() % (int) sizeof(words5) / sizeof(string);
 			//cout << "Choice 0 of words5: " << words5[0] << endl;
 			//cout << "Random choice of words5 " << words5[choice] << endl;
 			ss << words5[choice];
 			break;
 		case 6:
-			choice = rand() % (int) sizeof(words6) / sizeof(string) + 1;
+			choice = rand() % (int) sizeof(words6) / sizeof(string);
 			//cout << "Choice 0 of words6: " << words6[0] << endl;
 			//cout << "Random choice of words6 " << words6[choice] << endl;
 			ss << words6[choice];
 			break;
 		case 7:
-			choice = rand() % (int) sizeof(words7) / sizeof(string) + 1;
+			choice = rand() % (int) sizeof(words7) / sizeof(string);
 			//cout << "Choice 0 of words7: " << words7[0] << endl;
 			//cout << "Random choice of words7 " << words7[choice] << endl;
 			ss << words7[choice];
 			break;
 		case 8:
-			choice = rand() % (int) sizeof(words8) / sizeof(string) + 1;
+			choice = rand() % (int) sizeof(words8) / sizeof(string);
 			//cout << "Choice 0 of words8: " << words8[0] << endl;
 			//cout << "Random choice of words8 " << words8[choice] << endl;
 			ss << words8[choice];
 			break;
 		case 9:
-			choice = rand() % (int) sizeof(words9) / sizeof(string) + 1;
+			choice = rand() % (int) sizeof(words9) / sizeof(string);
 			//cout << "Choice 0 of words9: " << words9[0] << endl;
 			//cout << "Random choice of words9 " << words9[choice] << endl;
 			ss << words9[choice];
