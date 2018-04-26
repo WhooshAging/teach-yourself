@@ -20,7 +20,6 @@
 //
 //
 // TO DO
-// lookup how to restart a map iterator!
 // re-write everyting as funcs
 // then ultimately as a class
 // more?
@@ -33,100 +32,59 @@
 using namespace std;
 
 int main() {
+	// https://stackoverflow.com/questions/26281979/c-loop-through-map
 
 	unordered_map<string, unordered_map<string, int> > hash_tbl;
 
+
 	// set some examples
-	hash_tbl["I"]["am"] = 1;
-	hash_tbl["a"]["car"] = 2;
-	hash_tbl["he"]["is"] = 4;
+	//hash_tbl["I"]["am"] = 1;
+	//hash_tbl["a"]["car"] = 2;
+	//hash_tbl["he"]["is"] = 4;
 
-	//cout << hash_tbl.size() << endl;
-
-	// Loop through first u_map
-
-	string keys[hash_tbl.size()];
-
-	// https://stackoverflow.com/questions/26281979/c-loop-through-map
-
-	/* ~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ START Working code examples
-
-	 unordered_map<string, unordered_map<string, int> >::iterator it;
-	 for (it = hash_tbl.begin(); it != hash_tbl.end(); it++, i++) {
-	 cout << "Key read from map: " << it->first << endl; // prints keys
-	 keys[i] = it->first; // saves them in our string array
-	 }
-
-	 // We now have normal array we can loop over
-
-	 for (unsigned int i = 0; i < sizeof(keys) / sizeof(string); i++) {
-	 cout << "Key read from array: " << flush;
-	 cout << keys[i] << endl;
-	 }
-
-	 // Keys for first map return u_map<str,int>
-	 // Same technique to get those keys
-
-	 unordered_map<string, int>::iterator it2;
-	 for (unsigned int i = 0; i < sizeof(keys) / sizeof(string); i++) {
-	 // hash_tbl[key] gives another map<str,int>
-	 // how to deal with this?
-
-	 for (it2 = hash_tbl[keys[i]].begin(); it2 != hash_tbl[keys[i]].end();
-	 it2++) {
-	 cout << "Key read from 2nd map: " << it2->first << endl; // prints keys
-	 cout << "Value read from 2nd map: " << it2->second << endl; // prints values
-	 }
-	 }
-
-	 ~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ END Working code examples
-	 */
-
+	// set our iterators, one for each umap we have
+	unordered_map<string, unordered_map<string, int> >::iterator it1;
+	unordered_map<string, int>::iterator it2;
 
 	// EXAMPLE CODE FOLLOWS - READY TO BE MADE TO FUNCS
 	// SEE COMMENTS
-
-	// show keys before we make a change
-	// should look like
-	// hash_tbl["I"]["am"] = 1;
-	// hash_tbl["a"]["car"] = 2;
-	// hash_tbl["he"]["is"] = 4;
-
 	cout << "Programe Start" << endl;
 
+	/*	HOW TO ITTERATE OVER OUTER KEYS
+
+	//
 	// ITERATE OUTER KEYS
 	//
 	// Iterate through our outer keys k { k : ... }
-	// And print them
+	//
 	cout << "Iterate Outer Keys: " << flush;
 
-	unordered_map<string, unordered_map<string, int> >::iterator it1_z;
-	for (it1_z = hash_tbl.begin(); it1_z != hash_tbl.end(); it1_z++) {
-		cout << it1_z->first << flush; // first gives key, string here, second gives value, another umap here.
+	for (it1 = hash_tbl.begin(); it1 != hash_tbl.end(); it1++) {
+		cout << it1->first << flush; // first gives key(string), second gives value (umap)
 		cout << " " << flush;
 	}
 	cout << endl;
 
-	// ITERATE INNER KEYS
+	 */
+
+	//
+	// ITERATE INNER AND OUTER KEYS
 	//
 	// Iterate inner keys k and innner values v { ... : {k:v} }
 	//
 	cout << "Iterate inner and outer keys: " << endl;
 
-	unordered_map<string, unordered_map<string, int> >::iterator it1_j;
-	unordered_map<string, int>::iterator it2_j;
+	for (it1 = hash_tbl.begin(); it1 != hash_tbl.end(); it1++) {
 
-	for (it1_j = hash_tbl.begin(); it1_j != hash_tbl.end(); it1_j++) {
-
-		for (it2_j = hash_tbl[it1_j->first].begin();
-				it2_j != hash_tbl[it1_j->first].end(); it2_j++) {
+		for (it2 = hash_tbl[it1->first].begin();
+				it2 != hash_tbl[it1->first].end(); it2++) {
 
 			//cout << "Key|value read from 2nd map: " << flush;
-			//cout << it2_b->first << " | " << flush; // prints keys
-			//cout << it2_b->second << endl; // prints values
+			//cout << it2->first << " | " << flush; // prints keys
+			//cout << it2->second << endl; // prints values
 
-			cout << "{ " << it1_j->first << " : { " << it2_j->first << " : "
-					<< it2_j->second << " } }" << endl;
+			cout << "{ " << it1->first << " : { " << it2->first << " : "
+					<< it2->second << " } }" << endl;
 		}
 	}
 	cout << endl;
@@ -140,12 +98,12 @@ int main() {
 	//
 	cout << "Adding Entries" << endl;
 	//
-	/*
+//	/*
 	// Example 1: New Outer Key
 	string word1 = "she";
 	string word2 = "likes";
 	int nseen = 7;
-	*/
+//	*/
 
 	/*
 	// Example 2: Existing Outer Key, New Inner Key
@@ -154,23 +112,36 @@ int main() {
 	int nseen = 3;
 	*/
 
-//	/*
+	/*
 	// Example 3: Existing Outer and Inner Keys
 		string word1 = "a";
 		string word2 = "car";
 		int nseen = 3;
-//	*/
+	*/
 
 
-	unordered_map<string, unordered_map<string, int> >::iterator it1;
-	unordered_map<string, int>::iterator it2;
+	//unordered_map<string, unordered_map<string, int> >::iterator it1;
+	//unordered_map<string, int>::iterator it2;
+
+
+	// if we don't have a dict yet, it must be the first entry
+	// so add it
+
+	if (hash_tbl.size() == 0) {
+		cout << "New key : First Entry: " << word1 << endl;
+
+		unordered_map<string, int> data_to_add = { { word2, nseen} };
+		hash_tbl[word1] = data_to_add;
+
+	} else {
+
 
 	// check if word1 in outer keys
 	int outer_counter = 0;
 	for (it1 = hash_tbl.begin(); it1 != hash_tbl.end(); it1++) {
-		cout << "~~~~~~~~~~~~~~~~~~~~~~~ TRACE hash_tbl.size(): " << hash_tbl.size() << endl;
-		cout << "~~~~~~~~~~~~~~~~~~~~~~~ TRACE outer_counter: " << outer_counter << endl;
-		cout << "Checking Outer Key: " << it1->first << endl;
+		//cout << "~~~~~~~~~~~~~~~~~~~~~~~ TRACE hash_tbl.size(): " << hash_tbl.size() << endl;
+		//cout << "~~~~~~~~~~~~~~~~~~~~~~~ TRACE outer_counter: " << outer_counter << endl;
+		//cout << "Checking Outer Key: " << it1->first << endl;
 		if (it1->first == word1) {
 			// DUPLICATE OUTER KEY
 			cout << "... Outer Keys match" << endl;
@@ -181,9 +152,9 @@ int main() {
 					it2 != hash_tbl[it1->first].end(); it2++) {
 
 				//cout << "{ " << it1->first << " : { " << it2->first << " : " << it2->second << " } }" << endl;
-				cout << "~~~~~~~~~~~~~~~~~~~~~~~ TRACE hash_tbl[it1->first].size(): " << hash_tbl[it1->first].size() << endl;
-				cout << "~~~~~~~~~~~~~~~~~~~~~~~ TRACE inner_counter: " << inner_counter << endl;
-				cout << "Checking Inner Key: " << it2->first << endl;
+				//cout << "~~~~~~~~~~~~~~~~~~~~~~~ TRACE hash_tbl[it1->first].size(): " << hash_tbl[it1->first].size() << endl;
+				//cout << "~~~~~~~~~~~~~~~~~~~~~~~ TRACE inner_counter: " << inner_counter << endl;
+				//cout << "Checking Inner Key: " << it2->first << endl;
 
 				// INNER KEY MATCHES - UPDATE THE MAP
 
@@ -209,7 +180,7 @@ int main() {
 		} else if (outer_counter == (int)hash_tbl.size() - 1 ) { // Checked, sure new outer key
 
 			// NEW OUTER KEY - Create a new umap<s,i> and add k : {s,i} to our outer umap
-			cout << "... New key : " << word1 << endl;
+			cout << "New key : " << word1 << endl;
 
 			unordered_map<string, int> data_to_add = { { word2, nseen} };
 			hash_tbl[word1] = data_to_add;
@@ -217,28 +188,18 @@ int main() {
 		}
 		outer_counter++;
 	}
-
-	// CHECK OUTER KEY WAS ADDED
-
-	cout << "Outer keys read from map: " << flush;
-	for (it1 = hash_tbl.begin(); it1 != hash_tbl.end(); it1++) {
-		cout << it1->first << flush;
-		cout << " " << flush;
 	}
 	cout << endl;
 
-	// CHECK INNER KEY ADDED PROPERLY
+	// CHECK OUTER KEY WAS ADDED
+
+
+	// CHECK INNER AND OUTER KEYs ADDED PROPERLY
 
 	for (it1 = hash_tbl.begin(); it1 != hash_tbl.end(); it1++) {
-
 		for (it2 = hash_tbl[it1->first].begin();
 				it2 != hash_tbl[it1->first].end(); it2++) {
-
-			//cout << "Key|value read from 2nd map: " << flush;
-			//cout << it2->first << " | " << flush; // prints keys
-			//cout << it2->second << endl; // prints values
-
-			cout << "{ " << it1->first << " : { " << it2->first << " : "
+					cout << "{ " << it1->first << " : { " << it2->first << " : "
 					<< it2->second << " } }" << endl;
 		}
 	}
