@@ -131,127 +131,115 @@ int main() {
 	}
 	cout << endl;
 
-
+	//
 	// ADDING ENTRIES
 	//
-	// Example of adding things
-	// First example adds a new outer key
-	// NEED TO SET BELOW TO RUN THAT EXAMPLE it1_b->first == to_add
-	// Second example adds a new inner key
-	// it1_b->first == to_add2 for the second example
+	// 3 Cases: new outer key
+	//			existing outer, new inner
+	//			existing outer, existing inner
 	//
 	cout << "Adding Entries" << endl;
-
-	string to_add = "she";
+	//
+	/*
+	// Example 1: New Outer Key
+	string word1 = "she";
 	string word2 = "likes";
-	int nword2 = 7;
+	int nseen = 7;
+	*/
 
-	string to_add2 = "he";
-	string word2_2 = "was";
-	int nword2_2 = 3;
+	/*
+	// Example 2: Existing Outer Key, New Inner Key
+	string word1 = "he";
+	string word2 = "was";
+	int nseen = 3;
+	*/
 
-	// ~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~ TODO
-	//
-	// Another iterator? Should learn how to reset
-	// Should just declare two iterators at the start
-	// Then use throughout
-	//
-
-	unordered_map<string, unordered_map<string, int> >::iterator it1_b;
-	for (it1_b = hash_tbl.begin(); it1_b != hash_tbl.end(); it1_b++) {
-		// cout << "Key read from map: " << it->first << endl;
-		if (it1_b->first == to_add2) {
+//	/*
+	// Example 3: Existing Outer and Inner Keys
+		string word1 = "a";
+		string word2 = "car";
+		int nseen = 3;
+//	*/
 
 
+	unordered_map<string, unordered_map<string, int> >::iterator it1;
+	unordered_map<string, int>::iterator it2;
+
+	// check if word1 in outer keys
+	int outer_counter = 0;
+	for (it1 = hash_tbl.begin(); it1 != hash_tbl.end(); it1++) {
+		cout << "~~~~~~~~~~~~~~~~~~~~~~~ TRACE hash_tbl.size(): " << hash_tbl.size() << endl;
+		cout << "~~~~~~~~~~~~~~~~~~~~~~~ TRACE outer_counter: " << outer_counter << endl;
+		cout << "Checking Outer Key: " << it1->first << endl;
+		if (it1->first == word1) {
 			// DUPLICATE OUTER KEY
-
-
-
 			cout << "... Outer Keys match" << endl;
-			// need to get the nested map
-			// check if the word already exists
-			// if not add it
-			// if it does update the map
 
-			unordered_map<string, int>::iterator it2_x;
+			// Check if word2 in inner keys
+			int inner_counter = 0;
+			for (it2 = hash_tbl[it1->first].begin(); // it1->first is key string, hash_tbl[it1->first] is the inner umap
+					it2 != hash_tbl[it1->first].end(); it2++) {
 
-			// search the through neseted maps
-			for (it2_x = hash_tbl[it1_b->first].begin(); // it1_b->first is the outer key string, hash_tbl[it1_b->first] is the inner umap
-					it2_x != hash_tbl[it1_b->first].end(); it2_x++) {
-				//cout << "{ " << it1_d->first << " : { " << it2_b->first << " : " << it2_b->second << " } }" << endl;
-
+				//cout << "{ " << it1->first << " : { " << it2->first << " : " << it2->second << " } }" << endl;
+				cout << "~~~~~~~~~~~~~~~~~~~~~~~ TRACE hash_tbl[it1->first].size(): " << hash_tbl[it1->first].size() << endl;
+				cout << "~~~~~~~~~~~~~~~~~~~~~~~ TRACE inner_counter: " << inner_counter << endl;
+				cout << "Checking Inner Key: " << it2->first << endl;
 
 				// INNER KEY MATCHES - UPDATE THE MAP
 
-
-				if (it2_x->first == to_add2) {
-					// inner keys match
-					// need to update the held map
+				if (it2->first == word2) {
 					cout << "... ... Inner keys match" << endl;
+					// update the count we hold by count we provided
+					it2->second+= nseen;
 
-
-
-
-
-
-
-				} else {
+				} else if ( inner_counter == (int)hash_tbl[it1->first].size() - 1 ) { // Checked all, sure new inner key
 
 					// NEW INNER KEY - Insert a new pair(s,i) into umap of outer key {k : {s:i} }
-					//
-
-
 					cout << "... ... New Inner Key" << endl;
-					// need to insert into the map
-					//unordered_map<string, int> data_to_add = { { word2, nword2 } };
-					//hash_tbl[to_add] = data_to_add;
 
-					hash_tbl[it1_b->first].insert( pair<string,int>(word2_2, nword2_2) );
+					// insert word2:nseen into dict[outer_key] = {}
+
+					hash_tbl[it1->first].insert( pair<string,int>(word2, nseen) );
 
 					break;
 				}
+				inner_counter++;
 			}
 			break;
-		} else {
-
+		} else if (outer_counter == (int)hash_tbl.size() - 1 ) { // Checked, sure new outer key
 
 			// NEW OUTER KEY - Create a new umap<s,i> and add k : {s,i} to our outer umap
+			cout << "... New key : " << word1 << endl;
 
-
-			cout << "... New key : " << to_add << endl;
-			unordered_map<string, int> data_to_add = { { word2, nword2 } };
-			hash_tbl[to_add] = data_to_add;
+			unordered_map<string, int> data_to_add = { { word2, nseen} };
+			hash_tbl[word1] = data_to_add;
 			break;
 		}
+		outer_counter++;
 	}
 
 	// CHECK OUTER KEY WAS ADDED
 
-	unordered_map<string, unordered_map<string, int> >::iterator it1_c;
 	cout << "Outer keys read from map: " << flush;
-	for (it1_c = hash_tbl.begin(); it1_c != hash_tbl.end(); it1_c++) {
-		cout << it1_c->first << flush;
+	for (it1 = hash_tbl.begin(); it1 != hash_tbl.end(); it1++) {
+		cout << it1->first << flush;
 		cout << " " << flush;
 	}
 	cout << endl;
 
 	// CHECK INNER KEY ADDED PROPERLY
 
+	for (it1 = hash_tbl.begin(); it1 != hash_tbl.end(); it1++) {
 
-	unordered_map<string, unordered_map<string, int> >::iterator it1_d;
-	unordered_map<string, int>::iterator it2_b;
-
-	for (it1_d = hash_tbl.begin(); it1_d != hash_tbl.end(); it1_d++) {
-
-		for (it2_b = hash_tbl[it1_d->first].begin();
-				it2_b != hash_tbl[it1_d->first].end(); it2_b++) {
+		for (it2 = hash_tbl[it1->first].begin();
+				it2 != hash_tbl[it1->first].end(); it2++) {
 
 			//cout << "Key|value read from 2nd map: " << flush;
-			//cout << it2_b->first << " | " << flush; // prints keys
-			//cout << it2_b->second << endl; // prints values
+			//cout << it2->first << " | " << flush; // prints keys
+			//cout << it2->second << endl; // prints values
 
-			cout << "{ " << it1_d->first << " : { " << it2_b->first << " : "
-					<< it2_b->second << " } }" << endl;
+			cout << "{ " << it1->first << " : { " << it2->first << " : "
+					<< it2->second << " } }" << endl;
 		}
 	}
 
