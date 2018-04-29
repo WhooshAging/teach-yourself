@@ -22,7 +22,7 @@ Dict::~Dict() {
 	hash_tbl = NULL;
 	//if (!hash_tbl) {
 	//	cout << "Pointer deleted and memory freed" << endl;
-	}
+}
 
 void Dict::print() {
 	cout << endl;
@@ -210,6 +210,44 @@ string Dict::nextWord() {
 
 	return "";
 
-
 }
 
+void Dict::addFile(string fname) {
+
+	stringstream ss;
+	ss << "data/text-in/";
+	ss << fname;
+	ss << ".txt";
+
+	fstream myf;
+	myf.open(ss.str());
+	string word;
+	string sentance;
+	string delim = " ";
+	int start, end;
+
+	for (string line; getline(myf, line);) {
+		cout << line << endl;
+		cout << "\n\n" << endl;
+		start = 0;
+		end = line.find(delim);
+		while (end != (int) string::npos) {
+			// cout << line.substr(start, end - start) << endl;
+			sentance += line.substr(start, end - start) + " ";
+			if (line.substr(start, end - start).find(".") != string::npos) {
+				cout << sentance << endl;
+				cout << "\n\n\n" << endl;
+				sentance.clear();
+			}
+			start = end + delim.length();
+			end = line.find(delim, start);
+
+		}
+		sentance += line.substr(start, end - start); // also need to add the last word, becuae while loop wont run again and add it
+		cout << sentance << endl; // the last complete sentance, becuase while loop condition is broken
+		break;
+
+	}
+	myf.close();
+	return;
+}

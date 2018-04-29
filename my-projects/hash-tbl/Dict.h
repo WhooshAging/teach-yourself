@@ -27,9 +27,10 @@ public:
 	Dict();
 	virtual ~Dict();
 	void print();
-	void add(string, string, int);
+	void add(string, string, int); // and a single db entry { key : { key : value } }
 	void save();
 	void load();
+	void addFile(string); // add a file, each full entry per line
 	string nextWord();
 };
 

@@ -17,7 +17,38 @@
 
 int main() {
 	cout << "Programe Start" << endl;
-	Dict *dict = new Dict();
+
+
+
+	Dict *words = new Dict();
+
+	words->addFile("textin");
+
+	delete words;
+	words = NULL;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+ *
+ * TESTING
+  	Dict *words = new Dict();
 	cout << "Adding entries: " << flush;
 	dict->add("she", "likes", 7);
 	dict->add("she", "eats", 2);
@@ -33,6 +64,8 @@ int main() {
 	dict2->load();
 	dict2->print();
 	delete dict2;
-
+ *
+ *
+*/
 	return 0;
 }
