@@ -38,6 +38,14 @@ void Dict::print() {
 	return;
 }
 
+string Dict::toLower(string phrase) {
+	string x;
+	for (unsigned int i=0; i<phrase.length(); i++) {
+		x += tolower(phrase[i]);
+	}
+	return x;
+}
+
 void Dict::add(string word1, string word2, int nseen) {
 	//
 	// ADDING ENTRIES
@@ -47,6 +55,8 @@ void Dict::add(string word1, string word2, int nseen) {
 	//			existing outer, existing inner
 	//
 	cout << " ... " << flush;
+	word1 = toLower(word1);
+	word2 = toLower(word2);
 
 	// dict is empty so must be the first entry, just add it.
 
@@ -206,11 +216,25 @@ void Dict::load() {
 	cout << endl;
 }
 
-string Dict::nextWord() {
+string Dict::nextWord(string wordin) {
 	// Given an input string, return the next word based on frequency
 	// Loop through the nested array, check all values, return key of highest value
+	int best = 0;
+	string output;
 
-	return "";
+	for (it1 = hash_tbl->begin(); it1 != hash_tbl->end(); it1++) {
+		if (it1->first == wordin) {
+			for (it2 = (*hash_tbl)[it1->first].begin();
+								it2 != (*hash_tbl)[it1->first].end(); it2++) {
+				if (it2->second > best) {
+					output = it2->first;
+					best = it2->second;
+				}
+			}
+		}
+	}
+
+	return output;
 
 }
 

@@ -31,6 +31,8 @@ Bucket * Corpus::getBucket(int n) const {
 
 
 void Corpus::addWord(string wordin) {
+	cout << "In Corpus addWord" << endl;
+	cout << "wordin.size()-1) : " << wordin.size()-1 << endl;
 	Bucket *p_bucket = getBucket(wordin.size()-1);
 	p_bucket->addWord(wordin);
 }

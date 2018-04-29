@@ -23,6 +23,8 @@ public:
 	void loadDict();
 	void saveDict();
 	void addFile(string);
+	string randomPhrase(int, char []);
+	string genPhrase(int, char []);
 	virtual ~PiBot();
 private:
 	Corpus *p_corpus;

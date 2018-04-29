@@ -23,6 +23,7 @@ private:
 	// delimiters used for reading/writing our data strcutures
 	string delim_outer;
 	string delim_inner;
+	string toLower(string);
 public:
 	Dict();
 	virtual ~Dict();
@@ -30,7 +31,7 @@ public:
 	void add(string, string, int); // and a single db entry { key : { key : value } }
 	void save();
 	void load();
-	string nextWord();
+	string nextWord(string);
 };
 
 #endif /* DICT_H_ */

@@ -20,6 +20,7 @@ private:
 	int id;
 	int how_many;
 	vector<string> words;
+	string toLower(string);
 
 public:
 	static int count;
