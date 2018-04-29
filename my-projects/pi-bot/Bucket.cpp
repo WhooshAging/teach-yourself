@@ -35,16 +35,29 @@ int Bucket::getID() const {
 	return id;
 }
 
+void Bucket::addWord(string wordin) {
+	bool dupe = false;
+	for (unsigned int i=0; i<words.size(); i++) {
+		if (wordin == words[i]) {
+			dupe = true;
+			break;
+		}
+	}
+	if (!dupe) {
+		words.push_back(wordin);
+		how_many++;
+	}
+}
+
 void Bucket::loadData() {
 	ifstream myf;
 	stringstream ss;
-	ss << "data/";
+	ss << "data/word-buckets/";
 	ss << id;
 	ss << ".txt";
 	myf.open(ss.str());
 	int count = 0;
 	string x;
-
 	while (myf >> x) {
 		if (count == 0) {
 			int n = 0;
@@ -58,6 +71,31 @@ void Bucket::loadData() {
 	}
 	myf.close();
 }
+
+
+void Bucket::saveData() {
+	ofstream myf;
+	stringstream ss;
+	ss << "data/word-buckets/";
+	ss << id;
+	ss << ".txt";
+	myf.open(ss.str());
+	myf << words.size();
+	myf << "\n";
+
+	for (unsigned int i=0; i<words.size(); i++) {
+		myf << words[i];
+		myf << "\n";
+	}
+	myf.close();
+	return;
+}
+
+
+
+
+
+
 
 string Bucket::getRandomWord() const {
 	if (words.size() == 0) {

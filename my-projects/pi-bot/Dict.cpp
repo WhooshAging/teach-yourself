@@ -16,7 +16,7 @@ Dict::Dict() {
 }
 
 Dict::~Dict() {
-	cout << "Destroying Dict." << endl;
+	cout << "Destroying Dict" << endl;
 	// clean up
 	delete hash_tbl;
 	hash_tbl = NULL;
@@ -163,19 +163,21 @@ void Dict::load() {
 	ifstream myf;
 	myf.open("data/data.dict");
 
-	while (myf >> x) {
+
+
+	for (string line; getline(myf, line);) {
 		if (previous_line != "") {
 			// if it is, we're at the first line of file
 			if (previous_line == "~") {
 				// new outer key
 				// so new chunk of inner keys comming
 				// therefore reset all
-				outer_key = x;
+				outer_key = line;
 				inner_key = "";
 				value = 0;
 			} else if (previous_line == "|") {
 				// new inner key
-				inner_key = x;
+				inner_key = line;
 			} else {
 				// prev line is not a special char
 				// if we are now looking at an int, then go ahead and add
@@ -183,14 +185,14 @@ void Dict::load() {
 				// https://stackoverflow.com/questions/4654636/how-to-determine-if-a-string-is-a-number-with-c
 
 				stringstream check;
-				check << x;
+				check << line;
 				check >> value;
 				if (check.good()) {
 					// not an int, a string ==> inner key
-					inner_key = x;
-				} else if (value == 0 && x[0] != 0) {
+					inner_key = line;
+				} else if (value == 0 && line[0] != 0) {
 					// not an int, a string ==> inner key
-					inner_key = x;
+					inner_key = line;
 				} else {
 					// we are looking at an int
 					// ==> safe to add entry
@@ -199,7 +201,7 @@ void Dict::load() {
 				}
 			}
 		}
-		previous_line = x;
+		previous_line = line;
 	}
 	cout << endl;
 }
@@ -212,84 +214,4 @@ string Dict::nextWord() {
 
 }
 
-void Dict::addFile(string fname) {
 
-	stringstream ss;
-	ss << "data/text-in/";
-	ss << fname;
-	ss << ".txt";
-
-	fstream myf;
-	myf.open(ss.str());
-	string word;
-	string sentance;
-	string delim = " ";
-
-	int start, end;
-
-	char fullstop = '.';
-	char comma = ',';
-
-	const int MAXLENGTH = 9;
-
-	string o_key;
-
-	for (string line; getline(myf, line);) {
-		cout << line << endl;
-		cout << "\n" << endl;
-		start = 0;
-		end = line.find(delim);
-		while (end != (int) string::npos) {
-			//cout << "TRACE ~~~~~~~~~~~~ CURRENT WORD ~~~~~~~~" << line.substr(start, end - start) << endl;
-			word = line.substr(start, end - start);
-			//cout << "END OF WORD ~~~~~~~~ " << word.back() << endl;
-			// we now have individual words
-			// if word > maxlength reset o_key
-			// if last char full stop, strip, add as inner key and reset o key
-			// if last char comma, strip, add as inner key, and add to o key
-			// otherwise, add as inner key, add to u key
-			//
-			//cout << word << " : " << flush;
-			if (word.size() < MAXLENGTH) {
-				if (o_key.size() == 0) {
-					o_key = word + " ";
-					cout << "\n\n~~~~~~TRACE~~~~~~ O KEY LESS THAN 0\n\n" << endl;
-				} else {
-					if (word.back() == fullstop) {
-						cout << "ADD FINAL ENTRY: " << o_key << " : "
-								<< word.substr(0, word.size() - 1) + " "
-								<< endl;
-						o_key.clear();
-					} else if (word.back() == comma) {
-						cout << "ADD ENTRY: " << o_key << " : "
-								<< word.substr(0, word.size() - 1) + " "
-								<< endl;
-						o_key += word.substr(0, word.size() - 1) + " ";
-					} else {
-						cout << "ADD ENTRY: " << o_key << " : " << word << endl;
-						o_key += word + " ";
-					}
-				}
-			} else { // word is too long so reset
-				cout << "~~~Word Too Long~~~" << endl;
-				o_key.clear();
-			}
-			start = end + delim.length();
-						end = line.find(delim, start);
-		}
-		// last word of the entire entry is not analysed by above for loop
-		// do it manually here
-		word = line.substr(start, end - start);
-		if (word.back() == fullstop) {
-			word = word.substr(0, word.size() - 1);
-		}
-		cout << "ADD FINAL ENTRY: " << o_key << " : "
-					<< word + " " << endl;
-			o_key.clear();
-
-		break; // only work on the first line in text file for now. Don't forget to delete!
-
-	}
-	myf.close();
-	return;
-}

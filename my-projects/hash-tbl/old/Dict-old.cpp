@@ -8,7 +8,7 @@
 #include "Dict.h"
 
 Dict::Dict() {
-	cout << "Creating Dict." << endl;
+	//cout << "Default Constructor." << endl;
 	//hash_tbl[""][""] = 0;
 	hash_tbl = new unordered_map<string, unordered_map<string, int> >;
 	delim_outer = "~";
@@ -16,7 +16,7 @@ Dict::Dict() {
 }
 
 Dict::~Dict() {
-	cout << "Destroying Dict." << endl;
+	//cout << "Default Destructor." << endl;
 	// clean up
 	delete hash_tbl;
 	hash_tbl = NULL;
@@ -230,63 +230,31 @@ void Dict::addFile(string fname) {
 	char fullstop = '.';
 	char comma = ',';
 
-	const int MAXLENGTH = 9;
-
-	string o_key;
-
 	for (string line; getline(myf, line);) {
 		cout << line << endl;
 		cout << "\n" << endl;
 		start = 0;
 		end = line.find(delim);
 		while (end != (int) string::npos) {
-			//cout << "TRACE ~~~~~~~~~~~~ CURRENT WORD ~~~~~~~~" << line.substr(start, end - start) << endl;
+			// cout << line.substr(start, end - start) << endl;
 			word = line.substr(start, end - start);
 			//cout << "END OF WORD ~~~~~~~~ " << word.back() << endl;
-			// we now have individual words
-			// if word > maxlength reset o_key
-			// if last char full stop, strip, add as inner key and reset o key
-			// if last char comma, strip, add as inner key, and add to o key
-			// otherwise, add as inner key, add to u key
-			//
-			//cout << word << " : " << flush;
-			if (word.size() < MAXLENGTH) {
-				if (o_key.size() == 0) {
-					o_key = word + " ";
-					cout << "\n\n~~~~~~TRACE~~~~~~ O KEY LESS THAN 0\n\n" << endl;
-				} else {
-					if (word.back() == fullstop) {
-						cout << "ADD FINAL ENTRY: " << o_key << " : "
-								<< word.substr(0, word.size() - 1) + " "
-								<< endl;
-						o_key.clear();
-					} else if (word.back() == comma) {
-						cout << "ADD ENTRY: " << o_key << " : "
-								<< word.substr(0, word.size() - 1) + " "
-								<< endl;
-						o_key += word.substr(0, word.size() - 1) + " ";
-					} else {
-						cout << "ADD ENTRY: " << o_key << " : " << word << endl;
-						o_key += word + " ";
-					}
-				}
-			} else { // word is too long so reset
-				cout << "~~~Word Too Long~~~" << endl;
-				o_key.clear();
+			if (word.back() == fullstop) {
+				sentance += word.substr(0,word.size()-1) + " ";
+				cout << sentance << endl;
+				//cout << "\n" << endl;
+				sentance.clear();
+			} else if (word.back() == comma) {
+				sentance += word.substr(0,word.size()-1) + " ";
+			} else {
+				sentance += word + " ";
 			}
 			start = end + delim.length();
-						end = line.find(delim, start);
-		}
-		// last word of the entire entry is not analysed by above for loop
-		// do it manually here
-		word = line.substr(start, end - start);
-		if (word.back() == fullstop) {
-			word = word.substr(0, word.size() - 1);
-		}
-		cout << "ADD FINAL ENTRY: " << o_key << " : "
-					<< word + " " << endl;
-			o_key.clear();
+			end = line.find(delim, start);
 
+		}
+		sentance += line.substr(start, end - start); // also need to add the last word, becuae while loop wont run again and add it
+		cout << sentance << endl; // the last complete sentance, becuase while loop condition is broken
 		break; // only work on the first line in text file for now. Don't forget to delete!
 
 	}
