@@ -224,20 +224,30 @@ void Dict::addFile(string fname) {
 	string word;
 	string sentance;
 	string delim = " ";
+
 	int start, end;
+
+	char fullstop = '.';
+	char comma = ',';
 
 	for (string line; getline(myf, line);) {
 		cout << line << endl;
-		cout << "\n\n" << endl;
+		cout << "\n" << endl;
 		start = 0;
 		end = line.find(delim);
 		while (end != (int) string::npos) {
 			// cout << line.substr(start, end - start) << endl;
-			sentance += line.substr(start, end - start) + " ";
-			if (line.substr(start, end - start).find(".") != string::npos) {
+			word = line.substr(start, end - start);
+			//cout << "END OF WORD ~~~~~~~~ " << word.back() << endl;
+			if (word.back() == fullstop) {
+				sentance += word.substr(0,word.size()-1) + " ";
 				cout << sentance << endl;
-				cout << "\n\n\n" << endl;
+				//cout << "\n" << endl;
 				sentance.clear();
+			} else if (word.back() == comma) {
+				sentance += word.substr(0,word.size()-1) + " ";
+			} else {
+				sentance += word + " ";
 			}
 			start = end + delim.length();
 			end = line.find(delim, start);
@@ -245,7 +255,7 @@ void Dict::addFile(string fname) {
 		}
 		sentance += line.substr(start, end - start); // also need to add the last word, becuae while loop wont run again and add it
 		cout << sentance << endl; // the last complete sentance, becuase while loop condition is broken
-		break;
+		break; // only work on the first line in text file for now. Don't forget to delete!
 
 	}
 	myf.close();
