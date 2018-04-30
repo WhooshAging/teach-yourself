@@ -29,9 +29,9 @@ public:
 private:
 	Corpus *p_corpus;
 	Dict *words;
-	int n_buckets;
+	unsigned int n_buckets;
 	string toLower(string);
-	string cleanWord(string);
+	string cleanWord(string, bool &);
 };
 
 #endif /* PIBOT_H_ */

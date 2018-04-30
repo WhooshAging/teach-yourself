@@ -57,13 +57,19 @@ string PiBot::toLower(string phrase) {
 	return x;
 }
 
-string PiBot::cleanWord(string wordin) {
-	wordin = toLower(wordin);
-	stringstream out;
-	// & should be accepted on its own. %,! should be accepted at end only.
+string PiBot::cleanWord(string wordin, bool &isvalid) {
+	if (wordin.size() >= n_buckets || wordin == "," || wordin == "." || wordin == "") {
+		isvalid = false;
+		return "";
+	}
 	char banned_chars[] = { '@', '#', '^', '*', '(', ')', ',', ';', ':', '/',
-			'\\', '?', '[', ']', '"', '\'', '<', '>', '&', '%', '+', '=', '!'
-			};
+				'\\', '?', '[', ']', '"', '\'', '<', '>', '&', '%', '+', '=',
+				'!', '-'
+				};
+	// & should be accepted on its own. %,! should be accepted at end only.
+	wordin = toLower(wordin);
+		stringstream out;
+
 	bool banned;
 	for (string::iterator it = wordin.begin(), end = wordin.end(); it != end;
 			++it) {
@@ -72,6 +78,10 @@ string PiBot::cleanWord(string wordin) {
 		//*it = '*';
 		for (unsigned int i = 0; i < sizeof(banned_chars); i++) {
 			if (*it == banned_chars[i]) {
+				if (sizeof(wordin)/sizeof(string) == 1) {
+					isvalid = false;
+					return "";
+				}
 				if (*it == '%' && it != wordin.end() - 1) {
 					banned = true;
 					break;
@@ -80,7 +90,7 @@ string PiBot::cleanWord(string wordin) {
 					banned = true;
 					break;
 				}
-				if (*it == '!' && it == wordin.end()-1 && wordin.size() != 1) {
+				if (*it == '!' && it != wordin.end()-1) {
 					banned = true;
 					break;
 				}
@@ -116,21 +126,25 @@ void PiBot::addFile(string fname) {
 	char fullstop = '.';
 	char exclaim = '!';
 
-	const int MAXLENGTH = 9;
+
 
 	string o_key;
 	int total = 0;
 	int file_total = 0;
+
+	bool is_valid_word;
+
 	for (string line; getline(myf, line);) {
 //		cout << line << endl;
 //		cout << "\n" << endl;
 		start = 0;
 		end = line.find(delim);
 		while (end != (int) string::npos) {
-			word = cleanWord(line.substr(start, end - start));
+			is_valid_word = false;
+			word = cleanWord(line.substr(start, end - start), is_valid_word);
 			if (file_total % 250 == 0) {
 			cout << setw(16) << "\rCurrent word: " << setw(12) << word <<
-					setw(27) << " Words processed this file: " << setw(7) << total << flush;
+					setw(27) << " | Total words seen this file: " << setw(7) << total << flush;
 			}
 //			cout << "TRACE ~~~~~~~~~~~~ CURRENT WORD ~~~~~~~~"
 //					<< word << endl;
@@ -150,7 +164,7 @@ void PiBot::addFile(string fname) {
 			//
 			// cout << word << " : " << flush;
 			//
-			if (word.size() < MAXLENGTH && word != "," && word != "."
+			if (word.size() <  n_buckets && word != "," && word != "."
 					&& word != "") { // terrible fix here in case we encounter ',' or '.' in an entry
 				if (o_key.size() == 0) {
 					o_key = word + " ";
@@ -158,7 +172,7 @@ void PiBot::addFile(string fname) {
 					//cout << "\n\n~~~~~~TRACE~~~~~~ O KEY LESS THAN 0\n\n"
 			//				<< endl;
 				} else {
-					if (word.back() == fullstop && word.back() == exclaim) {
+					if (word.back() == fullstop || word.back() == exclaim) {
 						if (word != "...") {
 							word = word.substr(0, word.size() - 1);
 //							cout << "ADD FINAL ENTRY: " << o_key << " : "
@@ -184,17 +198,16 @@ void PiBot::addFile(string fname) {
 		}
 		// last word of the entire entry is not analysed by above for loop
 		// do it manually here
-		word = cleanWord(line.substr(start, end - start));
-		//cout << "TRACE ~~~~~~~~~~~~ FINAL WORD OUTSIDE LOOP~~~~~~~~"
-		//		<< word << endl;
+		word = cleanWord(line.substr(start, end - start), is_valid_word);
+		cout << "TRACE ~~~~~~~~~~~~ FINAL WORD OUTSIDE LOOP~~~~~~~~"
+				<< word << endl;
 		//cout << "word.size() : " << word.size() << endl;
-		if (word.size() < MAXLENGTH && word != "," && word != "."
-				&& word != "") {
-			if (word.back() == fullstop) {
+		if (word.size() < n_buckets && word != "," && word != "." && word != "") {
+			if (word.back() == fullstop || word.back() == exclaim) {
 				word = word.substr(0, word.size() - 1);
 			}
-		//	cout << "ADD FINAL ENTRY OUT OF LOOP: " << o_key << " : "
-		//			<< word + " " << endl;
+			cout << "ADD FINAL ENTRY OUT OF LOOP: " << o_key << " : "
+					<< word + " " << endl;
 		//	cout << "p corpus add word : " << word << endl;
 			p_corpus->addWord(word);
 		//	cout << "add to dict words" << endl;
