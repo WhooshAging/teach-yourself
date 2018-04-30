@@ -15,7 +15,7 @@ int main() {
 	learnLots(bot);
 	char my_pi[] = "31415926";
 	int n_digits = sizeof(my_pi);
-	int n_to_gen = 10;
+	int n_to_gen = 25;
 	cout << endl;
 	string phrase;
 	for (int i = 0; i < n_to_gen; i++) {
@@ -61,7 +61,7 @@ int main() {
 
 void learnLots(PiBot *bot) {
 	cout << "Working on file #: " << flush;
-	for (int i=1; i<11; i++) {
+	for (int i=1; i<6; i++) {
 		cout << i << " " << flush;
 		stringstream ss;
 		ss << i;
