@@ -30,6 +30,8 @@ private:
 	Corpus *p_corpus;
 	Dict *words;
 	int n_buckets;
+	string toLower(string);
+	string cleanWord(string);
 };
 
 #endif /* PIBOT_H_ */

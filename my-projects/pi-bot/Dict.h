@@ -23,7 +23,7 @@ private:
 	// delimiters used for reading/writing our data strcutures
 	string delim_outer;
 	string delim_inner;
-	string toLower(string);
+
 public:
 	Dict();
 	virtual ~Dict();

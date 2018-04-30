@@ -4,7 +4,7 @@
  *  Created on: Apr 28, 2018
  *      Author: Dan
  */
-
+#include <iomanip> // setw - fix width for cout
 #include "Dict.h"
 
 Dict::Dict() {
@@ -38,14 +38,6 @@ void Dict::print() {
 	return;
 }
 
-string Dict::toLower(string phrase) {
-	string x;
-	for (unsigned int i=0; i<phrase.length(); i++) {
-		x += tolower(phrase[i]);
-	}
-	return x;
-}
-
 void Dict::add(string word1, string word2, int nseen) {
 	//
 	// ADDING ENTRIES
@@ -55,8 +47,8 @@ void Dict::add(string word1, string word2, int nseen) {
 	//			existing outer, existing inner
 	//
 	//cout << " ... " << endl;
-	word1 = toLower(word1);
-	word2 = toLower(word2);
+	//word1 = toLower(word1);
+	//word2 = toLower(word2);
 
 	// dict is empty so must be the first entry, just add it.
 
@@ -161,8 +153,9 @@ void Dict::save() {
 
 void Dict::load() {
 	// load our dict from disk and re-create it in memory
-	cout << "Loading Data." << endl;
-	cout << "Adding entries: " << flush;
+	//cout << "Loading Data." << endl;
+
+
 
 	string x;
 	string outer_key = "";
@@ -173,12 +166,40 @@ void Dict::load() {
 	ifstream myf;
 	myf.open("data/data.dict");
 
-
 	int counter = 0;
-	if (counter % 10 == 0) {
-		cout << " ... " << flush;
-	}
+	cout << "Building Dictionary ." << flush;
 	for (string line; getline(myf, line);) {
+
+
+		if (counter % 10000 == 0) {
+			cout << "." << flush;
+		}
+/*
+		if (counter % 9000 == 0) {
+			cout << setw(11) << "\\\\" << flush;
+		}
+		if (counter % 9000 == 1000) {
+			cout << setw(11) << "||" << flush;
+		}
+		if (counter % 9000 == 2000) {
+			cout << setw(11) << "//" << flush;
+		}
+		if (counter % 9000 == 3000) {
+			cout << setw(11) << "==" << flush;
+		}
+		if (counter % 9000 == 5000) {
+			cout << setw(11) << "\\\\" << flush;
+		}
+		if (counter % 9000 == 6000) {
+			cout << setw(11) << "||" << flush;
+		}
+		if (counter % 9000 == 7000) {
+			cout << setw(11) << "//" << flush;
+		}
+		if (counter % 9000 == 8000) {
+			cout << setw(11) << "==" << flush;
+		}
+*/
 		if (previous_line != "") {
 			// if it is, we're at the first line of file
 			if (previous_line == "~") {
@@ -229,7 +250,7 @@ string Dict::nextWord(string wordin) {
 	for (it1 = hash_tbl->begin(); it1 != hash_tbl->end(); it1++) {
 		if (it1->first == wordin) {
 			for (it2 = (*hash_tbl)[it1->first].begin();
-								it2 != (*hash_tbl)[it1->first].end(); it2++) {
+					it2 != (*hash_tbl)[it1->first].end(); it2++) {
 				if (it2->second > best) {
 					output = it2->first;
 					best = it2->second;
@@ -241,5 +262,4 @@ string Dict::nextWord(string wordin) {
 	return output;
 
 }
-
 
