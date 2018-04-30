@@ -95,7 +95,7 @@ void PiBot::addFile(string fname) {
 			//
 			// cout << word << " : " << flush;
 			//
-			if (word.size() < MAXLENGTH) {
+			if (word.size() < MAXLENGTH && word != ",") { // terrible fix here in case we encounter ' , ' in an entry
 				if (o_key.size() == 0) {
 					if (word.back() == comma) {
 						o_key = word.substr(0, word.size() - 1) + " ";
@@ -140,7 +140,7 @@ void PiBot::addFile(string fname) {
 		word = line.substr(start, end - start);
 		cout << "TRACE ~~~~~~~~~~~~ FINAL WORD OUTSIDE LOOP~~~~~~~~" << line.substr(start, end - start) << endl;
 		cout << "word.size() : " << word.size() << endl;
-		if (word.size() < MAXLENGTH) {
+		if (word.size() < MAXLENGTH && word.size() != 0) {
 			word = line.substr(start, end - start);
 			if (word.back() == fullstop) {
 				word = word.substr(0, word.size() - 1);

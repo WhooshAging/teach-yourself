@@ -1,5 +1,8 @@
 #include "PiBot.h"
 
+
+void learnLots(PiBot *);
+
 int main() {
 
 	cout << "Bot Start" << endl;
@@ -9,7 +12,7 @@ int main() {
 	cout << "CORPUS SUMMARY" << endl;
 	bot->printCorpusSummary();
 	bot->loadDict();
-
+	learnLots(bot);
 	char my_pi[] = "31415926";
 	int n_digits = sizeof(my_pi);
 	int n_to_gen = 10;
@@ -24,6 +27,10 @@ int main() {
 		cout << endl;
 	}
 	cout << "Bot is finished. Shutting down." << endl;
+	 bot->saveCorpus();
+	 bot->saveDict();
+
+
 
 	/*
 	 cout << "Bot Start" << endl;
@@ -49,4 +56,20 @@ int main() {
 
 	delete bot;
 	return 0;
+}
+
+
+void learnLots(PiBot *bot) {
+	cout << "Working on file #: " << flush;
+	for (int i=1; i<11; i++) {
+		cout << i << " " << flush;
+		stringstream ss;
+		ss << i;
+		bot->addFile(ss.str());
+
+	}
+
+
+
+	return;
 }
