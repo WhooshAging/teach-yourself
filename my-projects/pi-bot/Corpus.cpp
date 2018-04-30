@@ -16,9 +16,9 @@ using namespace std;
 Corpus::Corpus(int n) {
 	cout << "Creating Corpus." << endl;
 	cout << "Creating Buckets: " << flush;
+	cout << endl;
 	NBUCKETS = n;
 	pcorpus = new Bucket[NBUCKETS]; // create pointer to array of 9 buckets
-	cout << endl << endl;
 }
 
 // PRIVATE
@@ -31,8 +31,8 @@ Bucket * Corpus::getBucket(int n) const {
 
 
 void Corpus::addWord(string wordin) {
-	cout << "In Corpus addWord" << endl;
-	cout << "wordin.size()-1) : " << wordin.size()-1 << endl;
+//	cout << "In Corpus addWord" << endl;
+//	cout << "wordin.size()-1) : " << wordin.size()-1 << endl;
 	Bucket *p_bucket = getBucket(wordin.size()-1);
 	p_bucket->addWord(wordin);
 }

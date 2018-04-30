@@ -5,6 +5,7 @@
  *      Author: Cherie
  */
 
+#include <iomanip>
 #include "PiBot.h"
 
 PiBot::PiBot() {
@@ -57,9 +58,11 @@ string PiBot::toLower(string phrase) {
 }
 
 string PiBot::cleanWord(string wordin) {
+	wordin = toLower(wordin);
 	stringstream out;
+	// & should be accepted on its own. %,! should be accepted at end only.
 	char banned_chars[] = { '@', '#', '^', '*', '(', ')', ',', ';', ':', '/',
-			'\\', '?', '[', ']', '"', '\'', '<', '>', '&', '%', '+', '='// & should be accepted on its own. % should be accepted at end only.
+			'\\', '?', '[', ']', '"', '\'', '<', '>', '&', '%', '+', '=', '!'
 			};
 	bool banned;
 	for (string::iterator it = wordin.begin(), end = wordin.end(); it != end;
@@ -77,6 +80,10 @@ string PiBot::cleanWord(string wordin) {
 					banned = true;
 					break;
 				}
+				if (*it == '!' && it == wordin.end()-1 && wordin.size() != 1) {
+					banned = true;
+					break;
+				}
 				banned = true;
 				break;
 
@@ -87,12 +94,12 @@ string PiBot::cleanWord(string wordin) {
 		}
 	}
 
-	cout << "Out stream: " << out.str() << endl;
+//	cout << "\rCurrent word: " << out.str() << flush;
 	return out.str();
 }
 
 void PiBot::addFile(string fname) {
-	cout << " addFile() START " << endl;
+	//cout << " addFile() START " << endl;
 	stringstream ss;
 	ss << "data/textin/";
 	ss << fname;
@@ -107,20 +114,25 @@ void PiBot::addFile(string fname) {
 	int start, end;
 
 	char fullstop = '.';
+	char exclaim = '!';
 
 	const int MAXLENGTH = 9;
 
 	string o_key;
-
+	int counter = 0;
 	for (string line; getline(myf, line);) {
-		cout << line << endl;
-		cout << "\n" << endl;
+//		cout << line << endl;
+//		cout << "\n" << endl;
 		start = 0;
 		end = line.find(delim);
 		while (end != (int) string::npos) {
 			word = cleanWord(line.substr(start, end - start));
-			cout << "TRACE ~~~~~~~~~~~~ CURRENT WORD ~~~~~~~~"
-					<< word << endl;
+			if (counter % 250 == 0) {
+			cout << setw(17) << "\rCurrent word: " << setw(12) << word <<
+					setw(28) << " Total words processed: " << setw(15) << counter << flush;
+			}
+//			cout << "TRACE ~~~~~~~~~~~~ CURRENT WORD ~~~~~~~~"
+//					<< word << endl;
 
 			//cout << "END OF WORD ~~~~~~~~ " << word.back() << endl;
 			// we now have individual words
@@ -142,19 +154,19 @@ void PiBot::addFile(string fname) {
 				if (o_key.size() == 0) {
 					o_key = word + " ";
 
-					cout << "\n\n~~~~~~TRACE~~~~~~ O KEY LESS THAN 0\n\n"
-							<< endl;
+					//cout << "\n\n~~~~~~TRACE~~~~~~ O KEY LESS THAN 0\n\n"
+			//				<< endl;
 				} else {
-					if (word.back() == fullstop) {
+					if (word.back() == fullstop && word.back() == exclaim) {
 						if (word != "...") {
 							word = word.substr(0, word.size() - 1);
-							cout << "ADD FINAL ENTRY: " << o_key << " : "
-									<< word + " " << endl;
+//							cout << "ADD FINAL ENTRY: " << o_key << " : "
+	//								<< word + " " << endl;
 							words->add(o_key, word, 1);
 							o_key.clear();
 						}
 					} else {
-						cout << "ADD ENTRY: " << o_key << " : " << word << endl;
+//						cout << "ADD ENTRY: " << o_key << " : " << word << endl;
 						words->add(o_key, word, 1);
 						o_key += word + " ";
 					}
@@ -162,39 +174,40 @@ void PiBot::addFile(string fname) {
 				p_corpus->addWord(word);
 			} else { // word is too long so reset
 				// need to handle things like grill...THAT'S -> treated as a single word ==> how to deal with this? here
-				cout << "~~~Word Too Long~~~" << endl;
+				//cout << "~~~Word Too Long~~~" << endl;
 				o_key.clear();
 			}
 			start = end + delim.length();
 			end = line.find(delim, start);
+			counter++;
 		}
 		// last word of the entire entry is not analysed by above for loop
 		// do it manually here
 		word = cleanWord(line.substr(start, end - start));
-		cout << "TRACE ~~~~~~~~~~~~ FINAL WORD OUTSIDE LOOP~~~~~~~~"
-				<< word << endl;
-		cout << "word.size() : " << word.size() << endl;
-		if (word.size() < MAXLENGTH && word.size() != 0 && word != ","
-				&& word != ".") { // terrible fix here in case we encounter ',' or '.' in an entry
-			word = line.substr(start, end - start);
+		//cout << "TRACE ~~~~~~~~~~~~ FINAL WORD OUTSIDE LOOP~~~~~~~~"
+		//		<< word << endl;
+		//cout << "word.size() : " << word.size() << endl;
+		if (word.size() < MAXLENGTH && word != "," && word != "."
+				&& word != "") {
 			if (word.back() == fullstop) {
 				word = word.substr(0, word.size() - 1);
 			}
-			cout << "ADD FINAL ENTRY OUT OF LOOP: " << o_key << " : "
-					<< word + " " << endl;
-			cout << "p corpus add word : " << word << endl;
+		//	cout << "ADD FINAL ENTRY OUT OF LOOP: " << o_key << " : "
+		//			<< word + " " << endl;
+		//	cout << "p corpus add word : " << word << endl;
 			p_corpus->addWord(word);
-			cout << "add to dict words" << endl;
+		//	cout << "add to dict words" << endl;
 			words->add(o_key, word, 1);
 		}
 		o_key.clear();
-		cout << "~~~~~~~~~~~~TRACE ~~~~~~~~ FINAL TASK OF THIS LINE OF FILE"
-				<< endl;
+		//cout << "~~~~~~~~~~~~TRACE ~~~~~~~~ FINAL TASK OF THIS LINE OF FILE"
+		//		<< endl;
 		//break; // only work on the first line in text file for now. Don't forget to delete!
 
 	}
-	cout << "\n\n\n~~~~TRACE ~~~~ All lines processed\n\n" << endl;
+	//cout << "\n\n\n~~~~TRACE ~~~~ All lines processed\n\n" << endl;
 	myf.close();
+	cout << endl;
 	return;
 }
 

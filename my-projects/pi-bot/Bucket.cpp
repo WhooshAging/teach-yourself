@@ -44,9 +44,9 @@ string Bucket::toLower(string phrase) {
 }
 
 void Bucket::addWord(string wordin) {
-cout << "Inside Bucket addWord at start." << endl;
+//cout << "Inside Bucket addWord at start." << endl;
 	wordin = toLower(wordin);
-	cout << "Bucket addWord toLower function returned : " << wordin << endl;
+//	cout << "Bucket addWord toLower function returned : " << wordin << endl;
 	bool dupe = false;
 	for (unsigned int i=0; i<words.size(); i++) {
 		if (wordin == words[i]) {

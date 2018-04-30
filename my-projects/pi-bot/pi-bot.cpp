@@ -4,8 +4,8 @@ void learnLots(PiBot *, int);
 
 int main() {
 
-	bool learn = false;
-	int learn_n = 25;
+	bool learn = true;
+	int learn_n = 5;
 	const int how_many_phrases = 25;
 
 	cout << "Bot Start" << endl;
@@ -53,7 +53,7 @@ int main() {
 		}
 		//cout << endl;
 	}
-	cout << "Bot is finished. Shutting down." << endl;
+	cout << "\nBot is finished. Shutting down." << endl;
 
 	/*
 	 cout << "Bot Start" << endl;
@@ -82,9 +82,9 @@ int main() {
 }
 
 void learnLots(PiBot *bot, int n) {
-	cout << "Working on file #: " << flush;
+//	cout << "Working on file #: " << flush;
 	for (int i = 1; i < n + 1; i++) {
-		cout << i << " " << flush;
+//		cout << i << " " << flush;
 		stringstream ss;
 		ss << i;
 		bot->addFile(ss.str());
