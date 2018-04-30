@@ -130,7 +130,7 @@ void PiBot::addFile(string fname) {
 			word = cleanWord(line.substr(start, end - start));
 			if (file_total % 250 == 0) {
 			cout << setw(16) << "\rCurrent word: " << setw(12) << word <<
-					setw(27) << " Words processed this file: " << setw(7) << flush;
+					setw(27) << " Words processed this file: " << setw(7) << total << flush;
 			}
 //			cout << "TRACE ~~~~~~~~~~~~ CURRENT WORD ~~~~~~~~"
 //					<< word << endl;
