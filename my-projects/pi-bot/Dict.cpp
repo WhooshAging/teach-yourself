@@ -54,7 +54,7 @@ void Dict::add(string word1, string word2, int nseen) {
 	//			existing outer, new inner
 	//			existing outer, existing inner
 	//
-	cout << " ... " << flush;
+	//cout << " ... " << endl;
 	word1 = toLower(word1);
 	word2 = toLower(word2);
 
@@ -174,7 +174,10 @@ void Dict::load() {
 	myf.open("data/data.dict");
 
 
-
+	int counter = 0;
+	if (counter % 10 == 0) {
+		cout << " ... " << flush;
+	}
 	for (string line; getline(myf, line);) {
 		if (previous_line != "") {
 			// if it is, we're at the first line of file
@@ -212,6 +215,7 @@ void Dict::load() {
 			}
 		}
 		previous_line = line;
+		counter++;
 	}
 	cout << endl;
 }

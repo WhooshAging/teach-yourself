@@ -12,7 +12,7 @@ int main() {
 	cout << "CORPUS SUMMARY" << endl;
 	bot->printCorpusSummary();
 	bot->loadDict();
-	learnLots(bot);
+	//learnLots(bot);
 	char my_pi[] = "31415926";
 	int n_digits = sizeof(my_pi);
 	int n_to_gen = 25;
@@ -27,8 +27,8 @@ int main() {
 		cout << endl;
 	}
 	cout << "Bot is finished. Shutting down." << endl;
-	 bot->saveCorpus();
-	 bot->saveDict();
+	 //bot->saveCorpus();
+	 //bot->saveDict();
 
 
 
@@ -61,7 +61,7 @@ int main() {
 
 void learnLots(PiBot *bot) {
 	cout << "Working on file #: " << flush;
-	for (int i=1; i<6; i++) {
+	for (int i=1; i<4; i++) {
 		cout << i << " " << flush;
 		stringstream ss;
 		ss << i;
