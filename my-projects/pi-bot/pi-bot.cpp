@@ -21,7 +21,7 @@ int main() {
 	for (int i = 0; i < n_to_gen; i++) {
 		phrase = bot->randomPhrase(n_digits, my_pi);
 		cout << "Random phrase: \t" << phrase << endl;
-
+		cout << " ~~~~~~~~~~~~~~~ " << endl;
 		phrase = bot->genPhrase(n_digits, my_pi);
 		cout << "Generated phrase: \t" << phrase << endl;
 		cout << endl;

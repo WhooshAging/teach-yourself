@@ -1,22 +1,24 @@
-pi-bot: pi-bot.o PiBot.o Dict.o Corpus.o Bucket.o
-	g++ -o pi-bot PiBot.o Dict.o Corpus.o Bucket.o
+pi-bot: Bucket.o Corpus.o Dict.o PiBot.o pi-bot.o
+	g++ -o pi-bot Bucket.o Corpus.o Dict.o PiBot.o pi-bot.o
 
-pi-bot.o : pi-bot.cpp
-	g++ -c pi-bot.cpp
+Bucket.o: Bucket.cpp Bucket.h
+	g++ -c Bucket.cpp
 
-PiBot.o: PiBot.cpp
-	g++ -c PiBot.cpp
-
-Dict.o: Dict.cpp
-	g++ -c Dict.cpp
-
-Corpus.o: Corpus.cpp
+Corpus.o: Corpus.cpp Corpus.h
 	g++ -c Corpus.cpp
 
-Bucket.o: Bucket.cpp
-	g++ -c Bucket.cpp
+Dict.o: Dict.cpp Dict.h
+	g++ -c Dict.cpp
+
+PiBot.o: PiBot.cpp PiBot.h
+	g++ -c PiBot.cpp
+
+pi-bot.o: pi-bot.cpp
+	g++ -c pi-bot.cpp
 
 all: pi-bot;
 
 clean:
 	rm -f pi-bot *.o
+
+
