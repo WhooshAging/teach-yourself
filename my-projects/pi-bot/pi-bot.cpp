@@ -5,7 +5,7 @@ void learnLots(PiBot *, int);
 int main() {
 
 	bool learn = true;
-	int learn_n = 5;
+	int learn_n = 9;
 	const int how_many_phrases = 25;
 
 	cout << "Bot Start" << endl;
