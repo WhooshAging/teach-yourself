@@ -95,7 +95,7 @@ void PiBot::addFile(string fname) {
 			//
 			// cout << word << " : " << flush;
 			//
-			if (word.size() < MAXLENGTH && word != ",") { // terrible fix here in case we encounter ' , ' in an entry
+			if (word.size() < MAXLENGTH && word != "," && word != '.') { // terrible fix here in case we encounter ',' or '.' in an entry
 				if (o_key.size() == 0) {
 					if (word.back() == comma) {
 						o_key = word.substr(0, word.size() - 1) + " ";
