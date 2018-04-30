@@ -119,7 +119,8 @@ void PiBot::addFile(string fname) {
 	const int MAXLENGTH = 9;
 
 	string o_key;
-	int counter = 0;
+	int total = 0;
+	int file_total = 0;
 	for (string line; getline(myf, line);) {
 //		cout << line << endl;
 //		cout << "\n" << endl;
@@ -127,9 +128,9 @@ void PiBot::addFile(string fname) {
 		end = line.find(delim);
 		while (end != (int) string::npos) {
 			word = cleanWord(line.substr(start, end - start));
-			if (counter % 250 == 0) {
-			cout << setw(17) << "\rCurrent word: " << setw(12) << word <<
-					setw(28) << " Total words processed: " << setw(15) << counter << flush;
+			if (file_total % 250 == 0) {
+			cout << setw(16) << "\rCurrent word: " << setw(12) << word <<
+					setw(27) << " Words processed this file: " << setw(7) << flush;
 			}
 //			cout << "TRACE ~~~~~~~~~~~~ CURRENT WORD ~~~~~~~~"
 //					<< word << endl;
@@ -179,7 +180,7 @@ void PiBot::addFile(string fname) {
 			}
 			start = end + delim.length();
 			end = line.find(delim, start);
-			counter++;
+			file_total++;
 		}
 		// last word of the entire entry is not analysed by above for loop
 		// do it manually here
@@ -200,6 +201,7 @@ void PiBot::addFile(string fname) {
 			words->add(o_key, word, 1);
 		}
 		o_key.clear();
+		total += file_total;
 		//cout << "~~~~~~~~~~~~TRACE ~~~~~~~~ FINAL TASK OF THIS LINE OF FILE"
 		//		<< endl;
 		//break; // only work on the first line in text file for now. Don't forget to delete!
