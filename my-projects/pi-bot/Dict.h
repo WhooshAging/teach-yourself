@@ -8,6 +8,8 @@
 #include <sstream>
 #include <unordered_map> // c++ eqv of Python {}
 #include <fstream> // read and write files
+#include <vector>
+
 using namespace std;
 
 #ifndef DICT_H_
@@ -32,6 +34,8 @@ public:
 	void save();
 	void load();
 	string nextWord(string);
+	void lookupOuter(string, vector<string>*); // lookup using outer key, return vector of inner keys
+	int lookupInner(string, string); // lookup using an outer and inner key, return int which is value of inner key
 };
 
 #endif /* DICT_H_ */

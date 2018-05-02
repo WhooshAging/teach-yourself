@@ -25,11 +25,13 @@ public:
 	void addFile(string);
 	string randomPhrase(int, char []);
 	string genPhrase(int, char []);
+
 	virtual ~PiBot();
 private:
 	Corpus *p_corpus;
 	Dict *words;
 	unsigned int n_buckets;
+	vector<string> current_phrase;
 	string toLower(string);
 	string cleanWord(string, bool &);
 };

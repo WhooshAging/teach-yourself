@@ -29,8 +29,6 @@
  *
  */
 
-
-
 #include <iomanip>
 #include "PiBot.h"
 
@@ -39,7 +37,8 @@ void learnLots(PiBot *, int);
 int main(int argc, char* argv[]) {
 
 	bool learn = true;
-	int learn_n = 20;
+
+	int learn_n = 1;
 	int how_many_phrases = 50;
 //
 //	if (argc==1) {
@@ -51,7 +50,7 @@ int main(int argc, char* argv[]) {
 //		learn_n
 //	}
 
-	cout << "Bot Start" << endl;
+	//cout << "Bot Start" << endl;
 	PiBot *bot = new PiBot();
 	//cout << "Load Dict and Corpus, print summary." << endl;
 	bot->loadCorpus();
@@ -65,10 +64,10 @@ int main(int argc, char* argv[]) {
 		learnLots(bot, learn_n);
 		bot->saveCorpus();
 		bot->saveDict();
-		bot->printDict();
+		//bot->printDict();
 		bot->printCorpusSummary();
 	}
-	bot->printDict();
+//	bot->printDict();
 	char my_pi[] = "31415926";
 	int n_digits = sizeof(my_pi);
 	const int n_to_gen = how_many_phrases;
@@ -76,32 +75,31 @@ int main(int argc, char* argv[]) {
 
 	string phrase;
 	string word;
-	bool first;
+	const int W = 15;
+	cout << setw(W) << left << "3" << setw(W) << left << "1" << setw(W) << left << "4" << setw(W) << left <<
+			"1" << setw(W) << left << "5" << setw(W) << left << "9" << setw(W) << left << "2" <<
+			setw(W) << "6" << endl;
 
 	for (int i = 0; i < n_to_gen; i++) {
-		first = true;
 		//phrase = bot->randomPhrase(n_digits, my_pi);
 		//cout << "Random phrase: \t" << phrase << endl;
 		//cout << " ~~~~~~~~~~~~~~~ " << endl;
 		phrase = bot->genPhrase(n_digits, my_pi);
 
-		istringstream iss(phrase);
-
-		cout << "Seed: [" << flush;
-		while (iss >> word) {
-			if (first) {
-				cout << word << "] \n " << flush;
-				first = false;
-			}
-
-			cout << "Generated phrase: \t" << phrase << endl;
-		}
-		//cout << endl;
+		  for (string::iterator it=phrase.begin(); it!=phrase.end(); it++) {
+			  if (*it == '[') {
+				  word += *it;
+			  } else if (*it == ']') {
+				  word += *it;
+				  cout << left << setw(W) << word << flush;
+				  word.clear();
+			  } else {
+				  word += *it;
+			  }
+		  }
+		  cout << endl;
 	}
 	cout << endl;
-
-
-
 
 	cout << "\nBot is finished. Shutting down." << endl;
 
@@ -136,7 +134,7 @@ void learnLots(PiBot *bot, int n) {
 //	cout << "Working on file #: " << flush;
 	for (int i = 1; i < n + 1; i++) {
 //		cout << i << " " << flush;
-		cout << setw(8) << "File # : " << setw(2) << i << " " << flush;
+		cout << "\n" << "File # : " << i << "\n" << endl;
 		stringstream ss;
 		ss << i;
 		bot->addFile(ss.str());

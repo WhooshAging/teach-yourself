@@ -35,17 +35,9 @@ int Bucket::getID() const {
 	return id;
 }
 
-string Bucket::toLower(string phrase) {
-	string x;
-	for (unsigned int i=0; i<phrase.length(); i++) {
-		x += tolower(phrase[i]);
-	}
-	return x;
-}
 
 void Bucket::addWord(string wordin) {
 //cout << "Inside Bucket addWord at start." << endl;
-	wordin = toLower(wordin);
 //	cout << "Bucket addWord toLower function returned : " << wordin << endl;
 	bool dupe = false;
 	for (unsigned int i=0; i<words.size(); i++) {
@@ -110,7 +102,7 @@ void Bucket::saveData() {
 
 string Bucket::getRandomWord() const {
 	if (words.size() == 0) {
-		return "";
+		return "NONE";
 	} else {
 	int choice = rand() % words.size();
 	return words[choice];

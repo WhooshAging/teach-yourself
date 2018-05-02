@@ -263,3 +263,33 @@ string Dict::nextWord(string wordin) {
 
 }
 
+void Dict::lookupOuter(string key, vector<string> *inner_keys) {
+//	cout << "Start of Dict lookupOuter. Outer key searching for is: " << key << endl;
+	for (it1 = hash_tbl->begin(); it1 != hash_tbl->end(); it1++) {
+		//cout << "it1->first" << it1->first << endl;
+		if (it1->first == key) {
+//			cout << "Dict lookupOuter - provided key matches a key in our dict" << endl;
+			for (it2 = (*hash_tbl)[it1->first].begin();
+					it2 != (*hash_tbl)[it1->first].end(); it2++) {
+//				cout << "Dict lookup outer. Pushing: " << it2->first << " to vector by pointer." << endl;
+				inner_keys->push_back(it2->first);
+			}
+		}
+	}
+
+	return;
+}
+
+int Dict::lookupInner(string outer, string inner) {
+	for (it1 = hash_tbl->begin(); it1 != hash_tbl->end(); it1++) {
+		if (it1->first == outer) {
+			for (it2 = (*hash_tbl)[it1->first].begin();
+					it2 != (*hash_tbl)[it1->first].end(); it2++) {
+				if (it2->first == inner) {
+					return it2->second;
+				}
+			}
+		}
+	}
+	return 0; // what if we don't find an inner key? return 0 makes sense? 0 won't ever be in our data.
+}
