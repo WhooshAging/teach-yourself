@@ -175,9 +175,9 @@ void PiBot::addFile(string fname) {
 				} else {
 					if (word.back() == fullstop || word.back() == exclaim) {
 						if (word != "...") {
-							cout << "FULL STOP! " << word << endl;
+//							cout << "FULL STOP! " << word << endl;
 							word = word.substr(0, word.size() - 1);
-							cout << "WORD after cut: " << word << endl;
+//							cout << "WORD after cut: " << word << endl;
 //							cout << "ADD FINAL ENTRY: " << o_key << " : "
 							//								<< word + " " << endl;
 							words->add(o_key, word, 1);
@@ -208,9 +208,9 @@ void PiBot::addFile(string fname) {
 		if (word.size() <= n_buckets && word != "," && word != "."
 				&& word != "") {
 			if (word.back() == fullstop || word.back() == exclaim) {
-				cout << "OUT OF LOOP FULL STOP! " << word << endl;
+//				cout << "OUT OF LOOP FULL STOP! " << word << endl;
 				word = word.substr(0, word.size() - 1);
-				cout << "OUT OF LOOP WORD after cut: " << word << endl;
+//				cout << "OUT OF LOOP WORD after cut: " << word << endl;
 
 			}
 //			cout << "ADD FINAL ENTRY OUT OF LOOP: " << o_key << " : "
