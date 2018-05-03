@@ -36,7 +36,7 @@ void learnLots(PiBot *, int);
 
 int main(int argc, char* argv[]) {
 
-	bool learn = true;
+	bool learn = false;
 
 	int learn_n = 1;
 	int how_many_phrases = 10;
@@ -79,13 +79,17 @@ int main(int argc, char* argv[]) {
 	cout << setw(W) << left << "3" << setw(W) << left << "1" << setw(W) << left << "4" << setw(W) << left <<
 			"1" << setw(W) << left << "5" << setw(W) << left << "9" << setw(W) << left << "2" <<
 			setw(W) << "6" << endl;
+	for (int i=0; i<(n_digits-1) * W; i++) {
+		cout << "-" << flush;
+	}
+	cout << endl;
 
 	for (int i = 0; i < n_to_gen; i++) {
 		//phrase = bot->randomPhrase(n_digits, my_pi);
 		//cout << "Random phrase: \t" << phrase << endl;
 		//cout << " ~~~~~~~~~~~~~~~ " << endl;
 		phrase = bot->genPhrase(n_digits, my_pi);
-
+//		cout << " TRACE PHRASE IS: " << phrase << endl;
 		  for (string::iterator it=phrase.begin(); it!=phrase.end(); it++) {
 			  if (*it == '[') {
 				  word += *it;

@@ -101,7 +101,6 @@ string PiBot::cleanWord(string wordin, bool &isvalid) {
 				banned = true;
 				break;
 
-
 			}
 		}
 		if (!banned) {
@@ -171,6 +170,9 @@ void PiBot::addFile(string fname) {
 			if (word.size() <= n_buckets && word != "," && word != "."
 					&& word != "") { // terrible fix here in case we encounter ',' or '.' in an entry
 				if (o_key.size() == 0) {
+					if (word.back() == fullstop) {
+						word = word.substr(0, word.size() - 1);
+					}
 					o_key = word;
 
 					//cout << "\n\n~~~~~~TRACE~~~~~~ O KEY LESS THAN 0\n\n"
@@ -189,7 +191,7 @@ void PiBot::addFile(string fname) {
 					} else {
 //						cout << "ADD ENTRY: " << o_key << " : " << word << endl;
 						words->add(o_key, word, 1);
-						o_key +=  + " " + word;
+						o_key += +" " + word;
 					}
 				}
 				p_corpus->addWord(word);
@@ -247,7 +249,7 @@ string PiBot::genPhrase(int n_ele, char s_digits[]) {
 	string inner_key;
 	string outer_key;
 	vector<string> *inner_keys = new vector<string>;
-	int j;
+	unsigned int j;
 	int best;
 	string best_word;
 	int inner_k_value;
@@ -261,7 +263,7 @@ string PiBot::genPhrase(int n_ele, char s_digits[]) {
 			next_word = p_corpus->getRandomWord(j - 1);
 //			cout << "Digit of Pi : " << j << " | i=0 Word selected: " << next_word << endl;
 			outer_key = next_word;
-			output += "[" + next_word + "]";
+			output += "[" + next_word + "]" + " ";
 		} else {
 //			cout << "PiBot genPhrase i not 0" << endl;
 //			cout << "Outer key is now: " << outer_key << endl;
@@ -288,7 +290,7 @@ string PiBot::genPhrase(int n_ele, char s_digits[]) {
 				next_word = p_corpus->getRandomWord(j - 1);
 //				cout << "Digit of Pi : " << j << " | i=0 Word selected: " << next_word << endl;
 				outer_key = next_word;
-				output += " [" + next_word + "]";
+				output += "[" + next_word + "]" + " ";
 			} else {
 
 //				for (unsigned int v = 0; v < inner_keys->size(); v++) {
@@ -301,21 +303,32 @@ string PiBot::genPhrase(int n_ele, char s_digits[]) {
 
 				for (unsigned int k = 0; k < inner_keys->size(); k++) {
 					inner_key = (*inner_keys)[k];
+					if (inner_key.size() == j) {
 //					cout << "Searching for inner key: " << inner_key << endl;
-					inner_k_value = words->lookupInner(outer_key, inner_key);
+						inner_k_value = words->lookupInner(outer_key,
+								inner_key);
 //					cout << "Inner k value after lookup of" << inner_key << " " << inner_k_value << endl;
-					if (inner_k_value > best) {
-						best = inner_k_value;
-						best_word = inner_key;
-						next_word = best_word;
-					}
+						if (inner_k_value > best) {
+							best = inner_k_value;
+							best_word = inner_key;
+							next_word = best_word;
+						}
 //					cout << "After inner lookup, next_word is: " << next_word << endl;
+					}
 				}
+				if (best == 0) {
+					// we didn't find a valid inner key
+					next_word = p_corpus->getRandomWord(j - 1);
+	//				cout << "Digit of Pi : " << j << " | i=0 Word selected: " << next_word << endl;
+					outer_key = next_word;
+					output += "[" + next_word + "]" + " ";
+				} else {
 //				cout << "Digit of Pi : " << j << " | Word selected: "
 //						<< best_word << endl;
 				outer_key += " " + next_word;
-				output += " " + next_word;
+				output += next_word + " ";
 				inner_keys->clear();
+				}
 			}
 		}
 	}
