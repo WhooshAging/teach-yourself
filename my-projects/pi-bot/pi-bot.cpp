@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
 	bool learn = true;
 
 	int learn_n = 1;
-	int how_many_phrases = 50;
+	int how_many_phrases = 10;
 //
 //	if (argc==1) {
 //		learn = false;
@@ -64,7 +64,7 @@ int main(int argc, char* argv[]) {
 		learnLots(bot, learn_n);
 		bot->saveCorpus();
 		bot->saveDict();
-		//bot->printDict();
+		bot->printDict();
 		bot->printCorpusSummary();
 	}
 //	bot->printDict();
@@ -91,6 +91,11 @@ int main(int argc, char* argv[]) {
 				  word += *it;
 			  } else if (*it == ']') {
 				  word += *it;
+				  if (it+1 == phrase.end()) {
+				  cout << left << setw(W) << word << flush;
+				  word.clear();
+				  }
+			  } else if (*it == ' ') {
 				  cout << left << setw(W) << word << flush;
 				  word.clear();
 			  } else {
@@ -132,7 +137,7 @@ int main(int argc, char* argv[]) {
 void learnLots(PiBot *bot, int n) {
 
 //	cout << "Working on file #: " << flush;
-	for (int i = 1; i < n + 1; i++) {
+	for (int i = 1; i <= n ; i++) {
 //		cout << i << " " << flush;
 		cout << "\n" << "File # : " << i << "\n" << endl;
 		stringstream ss;

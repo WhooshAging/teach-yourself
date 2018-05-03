@@ -281,11 +281,18 @@ void Dict::lookupOuter(string key, vector<string> *inner_keys) {
 }
 
 int Dict::lookupInner(string outer, string inner) {
+//	cout << "Start of Dict lookupInner" << endl;
+//	cout << "Lookin for outer key: " << outer + "]" << endl;
+//	cout << "Looking for inner key: " << inner + "]" << endl;
 	for (it1 = hash_tbl->begin(); it1 != hash_tbl->end(); it1++) {
+//		cout << "Checking against key in db: " << it1->first << endl;
 		if (it1->first == outer) {
+//			cout << "Outer keys match: " << outer << " | " << it1->first << endl;
 			for (it2 = (*hash_tbl)[it1->first].begin();
 					it2 != (*hash_tbl)[it1->first].end(); it2++) {
 				if (it2->first == inner) {
+//					cout << "Inner keys match. " << inner << " | " << it2->first << endl;
+//					cout << "Value to return is: " << it2->second << endl;
 					return it2->second;
 				}
 			}

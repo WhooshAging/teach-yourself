@@ -59,14 +59,16 @@ string PiBot::toLower(string phrase) {
 }
 
 string PiBot::cleanWord(string wordin, bool &isvalid) {
-	if (wordin.size() > n_buckets || wordin == "," || wordin == "."
-			|| wordin == "") {
+	if (wordin.size() > n_buckets + 1 || wordin == "," || wordin == "."
+			|| wordin == "" || wordin == " ") {
 		isvalid = false;
 		return "";
 	}
+	// PROBLEM - the above will wrongly reject "Christmas," becuase with the , it is too long!
+	// So chnaged to wordsisize() > n_buckets+1
 	char banned_chars[] = { '@', '#', '^', '*', '(', ')', ',', ';', ':', '/',
 			'\\', '?', '[', ']', '"', '\'', '<', '>', '&', '%', '+', '=', '!',
-			'-', ' ' };
+			'-', ' ', '~' };
 	// & should be accepted on its own. %,! should be accepted at end only.
 	wordin = toLower(wordin);
 	stringstream out;
@@ -79,7 +81,7 @@ string PiBot::cleanWord(string wordin, bool &isvalid) {
 		//*it = '*';
 		for (unsigned int i = 0; i < sizeof(banned_chars); i++) {
 			if (*it == banned_chars[i]) {
-				if (sizeof(wordin) / sizeof(string) == 1) {
+				if (wordin.size() == 1) {
 					isvalid = false;
 					return "";
 				}
@@ -98,6 +100,7 @@ string PiBot::cleanWord(string wordin, bool &isvalid) {
 				}
 				banned = true;
 				break;
+
 
 			}
 		}
@@ -129,7 +132,7 @@ void PiBot::addFile(string fname) {
 	char exclaim = '!';
 
 	string o_key;
-	int total = 0;
+//	int total = 0;
 	int file_total = 0;
 
 	bool is_valid_word;
@@ -145,7 +148,7 @@ void PiBot::addFile(string fname) {
 			if (file_total % 250 == 0) {
 				cout << setw(16) << "\rCurrent word: " << setw(12) << word
 						<< setw(27) << " | Total words seen this file: "
-						<< setw(7) << total << flush;
+						<< setw(7) << file_total << flush;
 			}
 //			cout << "TRACE ~~~~~~~~~~~~ CURRENT WORD ~~~~~~~~"
 //					<< word << endl;
@@ -168,7 +171,7 @@ void PiBot::addFile(string fname) {
 			if (word.size() <= n_buckets && word != "," && word != "."
 					&& word != "") { // terrible fix here in case we encounter ',' or '.' in an entry
 				if (o_key.size() == 0) {
-					o_key = word + " ";
+					o_key = word;
 
 					//cout << "\n\n~~~~~~TRACE~~~~~~ O KEY LESS THAN 0\n\n"
 					//				<< endl;
@@ -186,7 +189,7 @@ void PiBot::addFile(string fname) {
 					} else {
 //						cout << "ADD ENTRY: " << o_key << " : " << word << endl;
 						words->add(o_key, word, 1);
-						o_key += word + " ";
+						o_key +=  + " " + word;
 					}
 				}
 				p_corpus->addWord(word);
@@ -221,7 +224,8 @@ void PiBot::addFile(string fname) {
 			words->add(o_key, word, 1);
 		}
 		o_key.clear();
-		total += file_total;
+//		total += file_total;
+//		file_total++;
 		//cout << "~~~~~~~~~~~~TRACE ~~~~~~~~ FINAL TASK OF THIS LINE OF FILE"
 		//		<< endl;
 		//break; // only work on the first line in text file for now. Don't forget to delete!
@@ -263,6 +267,9 @@ string PiBot::genPhrase(int n_ele, char s_digits[]) {
 //			cout << "Outer key is now: " << outer_key << endl;
 			words->lookupOuter(outer_key, inner_keys);
 //			cout << "\nChoices for inner keys are: " << endl;
+//			for (unsigned int x=0; x<inner_keys->size();x++) {
+//				cout << (*inner_keys)[x] << endl;
+//			}
 //			cout << "inner_keys->size(): " << inner_keys->size() << endl;
 
 			// inner_keys could be empty
@@ -277,10 +284,11 @@ string PiBot::genPhrase(int n_ele, char s_digits[]) {
 			if (inner_keys->size() == 0) {
 				// it wan't an outer key, we dont have an inner keys to pick from
 				// just random a new entry
+//				cout << "Inner keys == 0." << endl;
 				next_word = p_corpus->getRandomWord(j - 1);
 //				cout << "Digit of Pi : " << j << " | i=0 Word selected: " << next_word << endl;
 				outer_key = next_word;
-				output += "[" + next_word + "]";
+				output += " [" + next_word + "]";
 			} else {
 
 //				for (unsigned int v = 0; v < inner_keys->size(); v++) {
@@ -293,11 +301,15 @@ string PiBot::genPhrase(int n_ele, char s_digits[]) {
 
 				for (unsigned int k = 0; k < inner_keys->size(); k++) {
 					inner_key = (*inner_keys)[k];
-					inner_k_value = words->lookupInner(output, inner_key);
+//					cout << "Searching for inner key: " << inner_key << endl;
+					inner_k_value = words->lookupInner(outer_key, inner_key);
+//					cout << "Inner k value after lookup of" << inner_key << " " << inner_k_value << endl;
 					if (inner_k_value > best) {
 						best = inner_k_value;
 						best_word = inner_key;
+						next_word = best_word;
 					}
+//					cout << "After inner lookup, next_word is: " << next_word << endl;
 				}
 //				cout << "Digit of Pi : " << j << " | Word selected: "
 //						<< best_word << endl;
