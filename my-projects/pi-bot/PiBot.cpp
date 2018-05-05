@@ -51,14 +51,21 @@ void PiBot::saveDict() {
 }
 
 string PiBot::toLower(string phrase) {
+//	if (phrase == "A") {
+//		cout << "toLower we have an A" << endl;
+//	}
 	string x;
 	for (unsigned int i = 0; i < phrase.length(); i++) {
 		x += tolower(phrase[i]);
 	}
+//	if (phrase == "A") {
+//			cout << "After toLower we have: " << x << endl;
+//		}
 	return x;
 }
 
 string PiBot::cleanWord(string wordin, bool &isvalid) {
+	string wordincopy = wordin;
 	if (wordin.size() > n_buckets + 1 || wordin == "," || wordin == "."
 			|| wordin == "" || wordin == " ") {
 		isvalid = false;
@@ -68,7 +75,7 @@ string PiBot::cleanWord(string wordin, bool &isvalid) {
 	// So chnaged to wordsisize() > n_buckets+1
 	char banned_chars[] = { '@', '#', '^', '*', '(', ')', ',', ';', ':', '/',
 			'\\', '?', '[', ']', '"', '\'', '<', '>', '&', '%', '+', '=', '!',
-			'-', ' ', '~' };
+			'-', ' ', '~', '$' };
 	// & should be accepted on its own. %,! should be accepted at end only.
 	wordin = toLower(wordin);
 	stringstream out;
@@ -79,6 +86,12 @@ string PiBot::cleanWord(string wordin, bool &isvalid) {
 		banned = false;
 		//std::cout << "One character: " << *it << "\n";
 		//*it = '*';
+
+		// no numbers
+		if (isdigit(*it)) {
+			banned = true;
+		}
+
 		for (unsigned int i = 0; i < sizeof(banned_chars); i++) {
 			if (*it == banned_chars[i]) {
 				if (wordin.size() == 1) {
@@ -109,6 +122,30 @@ string PiBot::cleanWord(string wordin, bool &isvalid) {
 	}
 
 //	cout << "\rCurrent word: " << out.str() << flush;
+//	if (out.str() == "s") {
+//		cout << "Out is s. Wordincopy is: " << wordincopy << endl;
+//	}
+
+	// hard code so that if we just have a single charcter
+	// and it is a isalpha
+	// and not a and i
+	// return ''
+
+	if (out.str().size() == 1) {
+		for (string::iterator it3 = out.str().begin(), end = out.str().end();
+				it3 != end; ++it3) {
+			if (isalpha(*it3)) {
+//				cout << "CLEAN WORD ISALPHA TRUE. *IT3 is: " << *it3 << endl;
+				if (*it3 != 'i' && *it3 != 'a') {
+//					cout << "CLEAN WORD *IT3 NOT A OR I ACTUALLY IS: " << *it3 << endl;
+					return "";
+				} else {
+					return out.str();
+				}
+			}
+		}
+	}
+
 	return out.str();
 }
 
@@ -144,6 +181,9 @@ void PiBot::addFile(string fname) {
 		while (end != (int) string::npos) {
 			is_valid_word = false;
 			word = cleanWord(line.substr(start, end - start), is_valid_word);
+//			if (word == "s") {
+//				cout << "It's an S after cleanWord" << endl;
+//			}
 			if (file_total % 250 == 0) {
 				cout << setw(16) << "\rCurrent word: " << setw(12) << word
 						<< setw(27) << " | Total words seen this file: "
@@ -168,12 +208,15 @@ void PiBot::addFile(string fname) {
 			// cout << word << " : " << flush;
 			//
 			if (word.size() <= n_buckets && word != "," && word != "."
-					&& word != "") { // terrible fix here in case we encounter ',' or '.' in an entry
+					&& word != "" ) { // terrible fix here in case we encounter ',' or '.' in an entry
 				if (o_key.size() == 0) {
 					if (word.back() == fullstop) {
 						word = word.substr(0, word.size() - 1);
 					}
 					o_key = word;
+//					if (o_key == "s") {
+//						cout << "O_KEY IS AN S" << endl;
+//					}
 
 					//cout << "\n\n~~~~~~TRACE~~~~~~ O KEY LESS THAN 0\n\n"
 					//				<< endl;
@@ -185,10 +228,17 @@ void PiBot::addFile(string fname) {
 //							cout << "WORD after cut: " << word << endl;
 //							cout << "ADD FINAL ENTRY: " << o_key << " : "
 							//								<< word + " " << endl;
+//							if (word == "s") {
+//								cout << "Have o_key, but inner key is s"
+//										<< endl;
+//							}
 							words->add(o_key, word, 1);
 							o_key.clear();
 						}
 					} else {
+//						if (word == "s") {
+//										cout << "NO ! or . at end ELSE STATAEMENT WORD IS s" << endl;
+//									}
 //						cout << "ADD ENTRY: " << o_key << " : " << word << endl;
 						words->add(o_key, word, 1);
 						o_key += +" " + word;
@@ -207,6 +257,9 @@ void PiBot::addFile(string fname) {
 		// last word of the entire entry is not analysed by above for loop
 		// do it manually here
 		word = cleanWord(line.substr(start, end - start), is_valid_word);
+//		if (word == "s") {
+//						cout << "Word is s in coude outside of loop" << endl;
+//					}
 //		cout << "TRACE ~~~~~~~~~~~~ FINAL WORD OUTSIDE LOOP~~~~~~~~"
 //				<< word << endl;
 		//cout << "word.size() : " << word.size() << endl;

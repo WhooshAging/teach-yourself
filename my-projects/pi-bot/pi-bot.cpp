@@ -2,27 +2,14 @@
  * 	BUGS
  *
  *
- *	{ bought the sport with ent package in feb and have already taken 2 trips over  : { 300 : 1 } }
- *	{ bought the sport with ent package in feb and have already taken 2 trips over  : {  : 301 } }
- *	{ mileage about  : { 19 : 1 } }
- *	{ mileage about  : {  : 20 } }
- *	{ myself are owners of 5 lexus vehicles 2 es 2 gs  : { 1 : 1 } }
- *	{ myself are owners of 5 lexus vehicles 2 es 2 gs  : {  : 2 } }
- *	{ is not very strong and feels only very slightly better than my previous  : { 02 : 1 } }
- *	{ is not very strong and feels only very slightly better than my previous  : {  : 3 } }
- *	{ is not very strong and feels only very slightly better than my previous 02  : { mdx : 2 }
- *	etc.) => etc.
- *	{ - handling on par with best sport sedans very  : { quiet : 2 } }
- *	{ else. oh and the back-up camera does not work well if too much light is  : { shining : 2 }
- *	{  : {  : 1 } }
- *	{  : { car : 2 } }
- *	{  : { economy : 1 } }
- *	{  : { leader : 2 } }
- *	{  : { it : 4 } }
  *	knows... => knows..
- *	{ and i wish i could pair my phone to  : { it-- : 1 }
- *	{ mama. wish it had the power  : { lift : 1 } }
- *	{ - but slightly  : { better : 1 } }
+ * impressive...lots => .l
+ *	on...The => .t
+ *	Acura/Honda ==> rejected, too long
+ *	h/o => ho
+ *	on...The => .t
+ *	4X4's => xs
+ * 90's ==> s
  *
  *
  *
@@ -32,14 +19,16 @@
 #include <iomanip>
 #include "PiBot.h"
 
-void learnLots(PiBot *, int);
+void learnLots(PiBot *, int, bool &);
 
 int main(int argc, char* argv[]) {
 
-	bool learn = false;
+	bool learn = true;
+	bool istest = true;
 
-	int learn_n = 1;
-	int how_many_phrases = 10;
+
+	int learn_n = 5;
+	int how_many_phrases = 100;
 //
 //	if (argc==1) {
 //		learn = false;
@@ -61,10 +50,10 @@ int main(int argc, char* argv[]) {
 	bot->printCorpusSummary();
 
 	if (learn == true) {
-		learnLots(bot, learn_n);
+		learnLots(bot, learn_n, istest);
 		bot->saveCorpus();
 		bot->saveDict();
-		bot->printDict();
+		//bot->printDict();
 		bot->printCorpusSummary();
 	}
 //	bot->printDict();
@@ -138,10 +127,14 @@ int main(int argc, char* argv[]) {
 	return 0;
 }
 
-void learnLots(PiBot *bot, int n) {
+void learnLots(PiBot *bot, int n, bool &testflag) {
+
+	if (testflag == true) {
+		bot->addFile("testing");
+	} else {
 
 //	cout << "Working on file #: " << flush;
-	for (int i = 1; i <= n ; i++) {
+	for (int i = 2; i <= 2 ; i++) {
 //		cout << i << " " << flush;
 		cout << "\n" << "File # : " << i << "\n" << endl;
 		stringstream ss;
@@ -149,6 +142,6 @@ void learnLots(PiBot *bot, int n) {
 		bot->addFile(ss.str());
 
 	}
-
+	}
 	return;
 }

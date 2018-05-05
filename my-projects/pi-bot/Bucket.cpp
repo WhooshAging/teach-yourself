@@ -37,7 +37,9 @@ int Bucket::getID() const {
 
 
 void Bucket::addWord(string wordin) {
-//cout << "Inside Bucket addWord at start." << endl;
+//	if (wordin == "2") {
+//		cout << "Inside Bucket addWord at start. Word to add is: \"" << wordin << "\"" << endl;
+//	}
 //	cout << "Bucket addWord toLower function returned : " << wordin << endl;
 	bool dupe = false;
 	for (unsigned int i=0; i<words.size(); i++) {
