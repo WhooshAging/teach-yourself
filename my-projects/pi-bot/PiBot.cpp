@@ -143,6 +143,10 @@ string PiBot::cleanWord(string wordin, bool &isvalid) {
 					return out.str();
 				}
 			}
+
+		if (*it3 == '.') {
+			return "";
+		}
 		}
 	}
 

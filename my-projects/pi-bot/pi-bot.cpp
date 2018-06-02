@@ -134,7 +134,7 @@ void learnLots(PiBot *bot, int n, bool &testflag) {
 	} else {
 
 //	cout << "Working on file #: " << flush;
-	for (int i = 2; i <= 2 ; i++) {
+	for (int i = 0; i <= n ; i++) {
 //		cout << i << " " << flush;
 		cout << "\n" << "File # : " << i << "\n" << endl;
 		stringstream ss;
