@@ -50,111 +50,7 @@ void PiBot::saveDict() {
 	words->save();
 }
 
-string PiBot::toLower(string phrase) {
-//	if (phrase == "A") {
-//		cout << "toLower we have an A" << endl;
-//	}
-	string x;
-	for (unsigned int i = 0; i < phrase.length(); i++) {
-		x += tolower(phrase[i]);
-	}
-//	if (phrase == "A") {
-//			cout << "After toLower we have: " << x << endl;
-//		}
-	return x;
-}
-
-string PiBot::cleanWord(string wordin, bool &isvalid) {
-	string wordincopy = wordin;
-	if (wordin.size() > n_buckets + 1 || wordin == "," || wordin == "."
-			|| wordin == "" || wordin == " ") {
-		isvalid = false;
-		return "";
-	}
-	// PROBLEM - the above will wrongly reject "Christmas," becuase with the , it is too long!
-	// So chnaged to wordsisize() > n_buckets+1
-	char banned_chars[] = { '@', '#', '^', '*', '(', ')', ',', ';', ':', '/',
-			'\\', '?', '[', ']', '"', '\'', '<', '>', '&', '%', '+', '=', '!',
-			'-', ' ', '~', '$' };
-	// & should be accepted on its own. %,! should be accepted at end only.
-	wordin = toLower(wordin);
-	stringstream out;
-
-	bool banned;
-	for (string::iterator it = wordin.begin(), end = wordin.end(); it != end;
-			++it) {
-		banned = false;
-		//std::cout << "One character: " << *it << "\n";
-		//*it = '*';
-
-		// no numbers
-		if (isdigit(*it)) {
-			banned = true;
-		}
-
-		for (unsigned int i = 0; i < sizeof(banned_chars); i++) {
-			if (*it == banned_chars[i]) {
-				if (wordin.size() == 1) {
-					isvalid = false;
-					return "";
-				}
-				if (*it == '%' && it != wordin.end() - 1) {
-					banned = true;
-					break;
-				}
-				if (*it == '\''
-						&& (it == wordin.begin() || it == wordin.end() - 1)) {
-					banned = true;
-					break;
-				}
-				if (*it == '!' && it != wordin.end() - 1) {
-					banned = true;
-					break;
-				}
-				banned = true;
-				break;
-
-			}
-		}
-		if (!banned) {
-			out << *it;
-		}
-	}
-
-//	cout << "\rCurrent word: " << out.str() << flush;
-//	if (out.str() == "s") {
-//		cout << "Out is s. Wordincopy is: " << wordincopy << endl;
-//	}
-
-	// hard code so that if we just have a single charcter
-	// and it is a isalpha
-	// and not a and i
-	// return ''
-
-	if (out.str().size() == 1) {
-		for (string::iterator it3 = out.str().begin(), end = out.str().end();
-				it3 != end; ++it3) {
-			if (isalpha(*it3)) {
-//				cout << "CLEAN WORD ISALPHA TRUE. *IT3 is: " << *it3 << endl;
-				if (*it3 != 'i' && *it3 != 'a') {
-//					cout << "CLEAN WORD *IT3 NOT A OR I ACTUALLY IS: " << *it3 << endl;
-					return "";
-				} else {
-					return out.str();
-				}
-			}
-
-		if (*it3 == '.') {
-			return "";
-		}
-		}
-	}
-
-	return out.str();
-}
-
 void PiBot::addFile(string fname) {
-	//cout << " addFile() START " << endl;
 	stringstream ss;
 	ss << "data/textin/";
 	ss << fname;
@@ -163,134 +59,52 @@ void PiBot::addFile(string fname) {
 	fstream myf;
 	myf.open(ss.str());
 	string word;
-	string sentance;
 	string delim = " ";
-
 	int start, end;
-
 	char fullstop = '.';
-	char exclaim = '!';
-
 	string o_key;
-//	int total = 0;
 	int file_total = 0;
 
-	bool is_valid_word;
-
 	for (string line; getline(myf, line);) {
-//		cout << line << endl;
-//		cout << "\n" << endl;
+		if (file_total % 250 == 0) {
+			cout << setw(16) << "\rCurrent word: " << setw(12) << word
+					<< setw(27) << " | Total words seen this file: "
+					<< setw(7) << file_total << flush;
+		}
 		start = 0;
 		end = line.find(delim);
 		while (end != (int) string::npos) {
-			is_valid_word = false;
-			word = cleanWord(line.substr(start, end - start), is_valid_word);
-//			if (word == "s") {
-//				cout << "It's an S after cleanWord" << endl;
-//			}
-			if (file_total % 250 == 0) {
-				cout << setw(16) << "\rCurrent word: " << setw(12) << word
-						<< setw(27) << " | Total words seen this file: "
-						<< setw(7) << file_total << flush;
-			}
-//			cout << "TRACE ~~~~~~~~~~~~ CURRENT WORD ~~~~~~~~"
-//					<< word << endl;
-
-			//cout << "END OF WORD ~~~~~~~~ " << word.back() << endl;
-			// we now have individual words
-			// if word > maxlength reset o_key
-			// if last char full stop, strip, add as inner key and reset o key
-			// if last char comma, strip, add as inner key, and add to o key
-			// otherwise, add as inner key, add to u key
-			// grill...THAT'S -> treated as a single word ==> how to deal with this?
-			// etc). -> removes the . adds etc) as key
-			// etc.) -> does nothing, adds etc.)
-			// need to deal with "..."
-			//
-			//
-			//
-			// cout << word << " : " << flush;
-			//
-			if (word.size() <= n_buckets && word != "," && word != "."
-					&& word != "" ) { // terrible fix here in case we encounter ',' or '.' in an entry
-				if (o_key.size() == 0) {
+			word = line.substr(start, end - start);
+			if (word.size() <= n_buckets) {
+				if (start == 0) {
+					o_key = word.substr(0, word.size());
+				}
+				else {
 					if (word.back() == fullstop) {
 						word = word.substr(0, word.size() - 1);
+						words->add(o_key, word, 1);
+						o_key.clear();
 					}
-					o_key = word;
-//					if (o_key == "s") {
-//						cout << "O_KEY IS AN S" << endl;
-//					}
-
-					//cout << "\n\n~~~~~~TRACE~~~~~~ O KEY LESS THAN 0\n\n"
-					//				<< endl;
-				} else {
-					if (word.back() == fullstop || word.back() == exclaim) {
-						if (word != "...") {
-//							cout << "FULL STOP! " << word << endl;
-							word = word.substr(0, word.size() - 1);
-//							cout << "WORD after cut: " << word << endl;
-//							cout << "ADD FINAL ENTRY: " << o_key << " : "
-							//								<< word + " " << endl;
-//							if (word == "s") {
-//								cout << "Have o_key, but inner key is s"
-//										<< endl;
-//							}
-							words->add(o_key, word, 1);
-							o_key.clear();
-						}
-					} else {
-//						if (word == "s") {
-//										cout << "NO ! or . at end ELSE STATAEMENT WORD IS s" << endl;
-//									}
-//						cout << "ADD ENTRY: " << o_key << " : " << word << endl;
+					else {
 						words->add(o_key, word, 1);
 						o_key += +" " + word;
 					}
 				}
 				p_corpus->addWord(word);
-			} else { // word is too long so reset
-				// need to handle things like grill...THAT'S -> treated as a single word ==> how to deal with this? here
-				//cout << "~~~Word Too Long~~~" << endl;
-				o_key.clear();
+			}
+			else {
+				o_key.clear(); // word is too long so reset our outer key and don't add
 			}
 			start = end + delim.length();
 			end = line.find(delim, start);
 			file_total++;
 		}
-		// last word of the entire entry is not analysed by above for loop
-		// do it manually here
-		word = cleanWord(line.substr(start, end - start), is_valid_word);
-//		if (word == "s") {
-//						cout << "Word is s in coude outside of loop" << endl;
-//					}
-//		cout << "TRACE ~~~~~~~~~~~~ FINAL WORD OUTSIDE LOOP~~~~~~~~"
-//				<< word << endl;
-		//cout << "word.size() : " << word.size() << endl;
-		if (word.size() <= n_buckets && word != "," && word != "."
-				&& word != "") {
-			if (word.back() == fullstop || word.back() == exclaim) {
-//				cout << "OUT OF LOOP FULL STOP! " << word << endl;
-				word = word.substr(0, word.size() - 1);
-//				cout << "OUT OF LOOP WORD after cut: " << word << endl;
-
-			}
-//			cout << "ADD FINAL ENTRY OUT OF LOOP: " << o_key << " : "
-//					<< word + " " << endl;
-			//	cout << "p corpus add word : " << word << endl;
-			p_corpus->addWord(word);
-			//	cout << "add to dict words" << endl;
-			words->add(o_key, word, 1);
-		}
+		word = line.substr(start, end - start);
+		word = word.substr(0, word.size() - 1);
+		words->add(o_key, word, 1);
 		o_key.clear();
-//		total += file_total;
-//		file_total++;
-		//cout << "~~~~~~~~~~~~TRACE ~~~~~~~~ FINAL TASK OF THIS LINE OF FILE"
-		//		<< endl;
-		//break; // only work on the first line in text file for now. Don't forget to delete!
-
 	}
-	//cout << "\n\n\n~~~~TRACE ~~~~ All lines processed\n\n" << endl;
+
 	myf.close();
 	cout << endl;
 	return;

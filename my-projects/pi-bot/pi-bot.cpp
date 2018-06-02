@@ -24,10 +24,8 @@ void learnLots(PiBot *, int, bool &);
 int main(int argc, char* argv[]) {
 
 	bool learn = true;
-	bool istest = true;
-
-
-	int learn_n = 5;
+	bool istest = false;
+	int learn_n = 25;
 	int how_many_phrases = 100;
 //
 //	if (argc==1) {
